@@ -1,6 +1,6 @@
 # Vizion training dataset
 
-The exact dataset the [v3 detector](../model) was trained on, in YOLO format: 2197 images, 2 classes.
+The exact dataset the [v3 detector](../model) was trained on, in YOLO format: 2197 images, 2 classes. It sits where the training scripts in [`../scripts`](../scripts) expect it.
 
 | Class | ID | Box covers |
 |---|---|---|
@@ -10,11 +10,12 @@ The exact dataset the [v3 detector](../model) was trained on, in YOLO format: 21
 ## Layout
 
 ```
-dataset/
-  data.yaml              # Ultralytics dataset file (paths relative to it)
-  train/images, train/labels
-  val/images,   val/labels
-  test/images,  test/labels
+data/
+  vizion/                # the training set
+    data.yaml            # Ultralytics dataset file (paths relative to it)
+    train/images, train/labels
+    val/images,   val/labels
+    test/images,  test/labels
   webcam/                # source of the real-camera frames, plus the held-out scene
     labels.json          # hand-checked pixel boxes for 15 webcam frames (4 scenes)
     raw/                 # the 15 original 610×480 frames
@@ -49,19 +50,30 @@ Scene s3 (`webcam/test/`, one capacitor and one resistor) never appears in train
 
 ## Training with it
 
-The settings used for v3 are in [`../model/training/args.yaml`](../model/training/args.yaml). In short:
+The settings used for v3 are in [`../model/training/args.yaml`](../model/training/args.yaml). From the repository root:
+
+```sh
+python scripts/train.py --model yolo26n.pt --epochs 100 --patience 25 --name yolo26n_v4
+python scripts/webcam_check.py runs/yolo26n_v4/weights/best.pt --imgsz 480   # labelled webcam frames
+python scripts/evaluate.py --run yolo26n_v4                                   # val, test, held-out webcam scene
+python scripts/export.py --run yolo26n_v4                                     # NCNN for the Pi -> pi/models/
+```
+
+Or directly with Ultralytics:
 
 ```python
 from ultralytics import YOLO
 
 model = YOLO("yolo26n.pt")
-model.train(data="dataset/data.yaml", imgsz=640, epochs=100, patience=25, batch=16,
+model.train(data="data/vizion/data.yaml", imgsz=640, epochs=100, patience=25, batch=16,
             flipud=0.5, degrees=10, cache="ram")
-model.val(data="dataset/data.yaml", split="test", imgsz=480)
-model.val(data="dataset/webcam/test/test.yaml", imgsz=480)   # held-out webcam scene
+model.val(data="data/vizion/data.yaml", split="test", imgsz=480)
+model.val(data="data/webcam/test/test.yaml", imgsz=480)   # held-out webcam scene
 ```
 
-To add new webcam frames, label them body-only in `webcam/labels.json` (pixel boxes `[class, x0, y0, x1, y1]`) and convert them to YOLO lines. More varied real-camera scenes are the best way to improve the model.
+To rebuild `data/vizion` from the original downloads: `sh scripts/download_data.sh`, unzip each `data/raw/<name>/ds.zip` into `data/raw/<name>/x/`, then run `python -I scripts/prepare_dataset.py` followed by `python -I scripts/prepare_webcam.py` (it adds the webcam frames and the synthetic scenes, once per fresh build).
+
+To add new webcam frames, capture them with the Pi's camera preview (Capture button), label them body-only in `webcam/labels.json` (pixel boxes `[class, x0, y0, x1, y1]`) and rebuild. More varied real-camera scenes, especially in bright light, are the best way to improve the model.
 
 ## Licence
 

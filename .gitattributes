@@ -1,0 +1,14 @@
+# The Pi runs these: keep Linux line endings on every checkout
+*.sh text eol=lf
+*.py text eol=lf
+*.desktop text eol=lf
+*.conf text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.yaml text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.bin binary
+*.woff binary
+*.param binary

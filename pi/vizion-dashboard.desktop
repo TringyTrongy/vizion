@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Vizion Dashboard
+Comment=Full-screen resistor and capacitor detection dashboard
+Exec=/home/vizion/vizion/run_dashboard.sh
+Icon=video-display
+Terminal=false
+Categories=Graphics;

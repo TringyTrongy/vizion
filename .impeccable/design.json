@@ -1,0 +1,393 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-08T16:00:00Z",
+  "title": "Design System: Vizion",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Drafting Film",
+        "canonical": "oklch(96.5% 0.003 174.5)",
+        "tonalRamp": [
+          "#101211",
+          "#272929",
+          "#414342",
+          "#5c5e5d",
+          "#7e8180",
+          "#a2a5a4",
+          "#c8cbca",
+          "#ecefee"
+        ]
+      },
+      "paper-hi": {
+        "role": "neutral",
+        "displayName": "Pressed Film",
+        "canonical": "oklch(93.2% 0.008 216.6)",
+        "tonalRamp": [
+          "#0e1314",
+          "#252a2b",
+          "#3e4345",
+          "#595f60",
+          "#7b8183",
+          "#9fa6a8",
+          "#c5ccce",
+          "#e9f0f2"
+        ]
+      },
+      "ink": {
+        "role": "primary",
+        "displayName": "Drafting Ink",
+        "canonical": "oklch(28.0% 0.061 266.9)",
+        "tonalRamp": [
+          "#060f2c",
+          "#1b2747",
+          "#334163",
+          "#4e5d81",
+          "#7080a6",
+          "#93a4cc",
+          "#b8caf4",
+          "#dceeff"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Form Ink",
+        "canonical": "oklch(43.8% 0.050 263.9)",
+        "tonalRamp": [
+          "#061027",
+          "#1c2841",
+          "#35425d",
+          "#4f5e7a",
+          "#71809f",
+          "#95a5c5",
+          "#bacbec",
+          "#deefff"
+        ]
+      },
+      "ink-3": {
+        "role": "neutral",
+        "displayName": "Idle Ink",
+        "canonical": "oklch(54.2% 0.040 260.3)",
+        "tonalRamp": [
+          "#081123",
+          "#1e293c",
+          "#374357",
+          "#525e74",
+          "#748198",
+          "#97a5bd",
+          "#bdcbe4",
+          "#e1efff"
+        ]
+      },
+      "nonrepro": {
+        "role": "neutral",
+        "displayName": "Non-repro Blue",
+        "canonical": "oklch(80.6% 0.039 237.2)",
+        "tonalRamp": [
+          "#001420",
+          "#152c3a",
+          "#2e4655",
+          "#496171",
+          "#6b8495",
+          "#8ea9ba",
+          "#b4cfe1",
+          "#d7f3ff"
+        ]
+      },
+      "dot": {
+        "role": "neutral",
+        "displayName": "Grid Dot",
+        "canonical": "oklch(88.5% 0.017 236.7)",
+        "tonalRamp": [
+          "#0a1318",
+          "#212a30",
+          "#3a444a",
+          "#555f66",
+          "#778289",
+          "#9ba6ae",
+          "#c1ccd4",
+          "#e4f1f9"
+        ]
+      },
+      "res": {
+        "role": "secondary",
+        "displayName": "Resistor Ink",
+        "canonical": "oklch(55.3% 0.174 38.4)",
+        "tonalRamp": [
+          "#360000",
+          "#550000",
+          "#860000",
+          "#a92700",
+          "#d25022",
+          "#fd774c",
+          "#ff9e72",
+          "#ffd2b3"
+        ]
+      },
+      "cap": {
+        "role": "secondary",
+        "displayName": "Capacitor Ink",
+        "canonical": "oklch(51.1% 0.086 186.4)",
+        "tonalRamp": [
+          "#001b18",
+          "#00352f",
+          "#005049",
+          "#006d65",
+          "#369188",
+          "#5fb6ad",
+          "#86ddd3",
+          "#aafff7"
+        ]
+      },
+      "fault": {
+        "role": "tertiary",
+        "displayName": "Red Pen",
+        "canonical": "oklch(45.5% 0.171 13.7)",
+        "tonalRamp": [
+          "#360002",
+          "#550016",
+          "#850026",
+          "#a81e40",
+          "#d24a61",
+          "#fc7084",
+          "#ff97a9",
+          "#ffcdd6"
+        ]
+      },
+      "fault-tint": {
+        "role": "tertiary",
+        "displayName": "Red Pen Wash",
+        "canonical": "oklch(91.3% 0.028 358.0)",
+        "tonalRamp": [
+          "#1c0c11",
+          "#342329",
+          "#4f3c42",
+          "#6b575d",
+          "#8f7a80",
+          "#b49ea4",
+          "#dbc3ca",
+          "#ffe7ee"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Per-class quantities in the parts list (TOTAL at 6rem). Tabular figures, text stroke 0.035em."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Camera message title; same band carries the wordmark (5.4rem, 0.16em), clock (4.6rem) and S1 state (4.4rem)."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Part names; band 2.6-3.6rem covers PRESENT lines, block names, TOTAL and the banner title."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Reference rows, designators, title-block values; camera detail at 2.6rem, max 60ch."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Table headers, title-block field names, S1 reference, rulers, notes, commands. Always floored in px."
+      }
+    },
+    "pens": [
+      {
+        "name": "pen-1",
+        "value": "0.1rem",
+        "purpose": "ISO 0.25 mm: internal table and title-block rules, ruler cells."
+      },
+      {
+        "name": "pen-2",
+        "value": "0.15rem",
+        "purpose": "ISO 0.35 mm: table header rule."
+      },
+      {
+        "name": "pen-3",
+        "value": "0.2rem",
+        "purpose": "ISO 0.5 mm: drawn objects and controls (blocks, tables, commands, stamp, focus outline)."
+      },
+      {
+        "name": "pen-4",
+        "value": "0.3rem",
+        "purpose": "ISO 0.7 mm: sheet frame, title block, connection banner."
+      }
+    ],
+    "scaling": {
+      "rule": ":root { font-size: min(calc(100vh / 108), calc(100vw / 192)); }",
+      "purpose": "1rem = 10px at 1920x1080; the 192x108rem sheet scales as one drawing. Lettering under 2rem uses max(Nrem, 11-14px) floors."
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Sheet easing for every state transition."
+      },
+      {
+        "name": "press",
+        "value": "150ms",
+        "purpose": "Command and switch hover/press fills."
+      },
+      {
+        "name": "state",
+        "value": "200ms",
+        "purpose": "Ink, border and mark colour changes; ruler zone wash."
+      },
+      {
+        "name": "lever",
+        "value": "220ms",
+        "purpose": "S1 lever swinging open or closed."
+      },
+      {
+        "name": "camera-dim",
+        "value": "300ms",
+        "purpose": "Camera canvas fading and greying when the picture is lost."
+      },
+      {
+        "name": "pulse",
+        "value": "420ms linear",
+        "purpose": "One pulse along the live S1 wire per detection result; max 8 in flight."
+      },
+      {
+        "name": "busy-blink",
+        "value": "1.2s steps(2, jump-none) infinite",
+        "purpose": "Busy block outline alternating ink and non-repro blue."
+      },
+      {
+        "name": "hold-exit",
+        "value": "1000ms linear",
+        "purpose": "Exit cell ink fill while held; kept under reduced motion as feedback."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact-sheet",
+        "value": "(max-width: 1599px), (max-height: 899px)",
+        "purpose": "Camera gives up 6rem width; right column widens to 66rem; notes strip grows to 9.1rem."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Command",
+      "kind": "button",
+      "refersTo": "command",
+      "description": "Ruled drawing-callout button, e.g. LEARN EMPTY TABLE.",
+      "html": "<button class=\"ds-cmd\" type=\"button\">LEARN EMPTY TABLE</button> <button class=\"ds-cmd\" type=\"button\" disabled>RE-LEARN EMPTY TABLE</button>",
+      "css": ".ds-cmd { min-height: 44px; padding: 9px 14px 6px; border: 2px solid var(--ink, #1b2747); border-radius: 0; background: var(--paper, #f1f4f3); color: var(--ink, #1b2747); font: 17px/1.2 osifont, 'DejaVu Sans Condensed', sans-serif; letter-spacing: 0.08em; white-space: nowrap; cursor: pointer; transition: background-color 150ms cubic-bezier(0.16,1,0.3,1), color 150ms cubic-bezier(0.16,1,0.3,1); } .ds-cmd:hover { background: var(--paper-hi, #e3eaec); } .ds-cmd:active { background: var(--ink, #1b2747); color: var(--paper, #f1f4f3); } .ds-cmd:focus-visible { outline: 2px dashed var(--ink, #1b2747); outline-offset: 4px; } .ds-cmd:disabled { cursor: default; color: var(--ink-3, #627087); border-color: var(--ink-3, #627087); border-style: dashed; background: var(--paper, #f1f4f3); }"
+    },
+    {
+      "name": "Switch S1",
+      "kind": "custom",
+      "refersTo": "switch",
+      "description": "Detection control drawn as an SPST switch; lever swings open and the downstream wire dashes when off.",
+      "html": "<button class=\"ds-switch\" type=\"button\" role=\"switch\" aria-checked=\"true\" onclick=\"this.setAttribute('aria-checked', this.getAttribute('aria-checked')==='true'?'false':'true'); this.querySelector('.ds-switch-state').textContent = this.getAttribute('aria-checked')==='true'?'ON':'OFF';\"><span class=\"ds-switch-ref\">S1 · DETECTION</span><svg class=\"ds-switch-art\" viewBox=\"0 0 260 80\" aria-hidden=\"true\"><line class=\"ds-wire\" x1=\"0\" y1=\"40\" x2=\"89\" y2=\"40\"/><line class=\"ds-wire ds-wire-out\" x1=\"177\" y1=\"40\" x2=\"260\" y2=\"40\"/><line class=\"ds-lever\" x1=\"96\" y1=\"40\" x2=\"167\" y2=\"40\"/><circle class=\"ds-terminal\" cx=\"96\" cy=\"40\" r=\"7\"/><circle class=\"ds-terminal\" cx=\"170\" cy=\"40\" r=\"7\"/></svg><span class=\"ds-switch-state\">ON</span></button>",
+      "css": ".ds-switch { display: grid; justify-items: center; gap: 4px; width: 260px; padding: 8px 0; border: 0; border-radius: 0; background: none; color: var(--ink, #1b2747); font-family: osifont, 'DejaVu Sans Condensed', sans-serif; cursor: pointer; transition: background-color 150ms cubic-bezier(0.16,1,0.3,1); } .ds-switch:hover { background: rgb(169 196 214 / 0.18); } .ds-switch:active { background: var(--paper-hi, #e3eaec); } .ds-switch:focus-visible { outline: 2px dashed var(--ink, #1b2747); outline-offset: 4px; } .ds-switch-ref { font-size: 17px; letter-spacing: 0.08em; color: var(--ink-2, #44526e); } .ds-switch-art { width: 100%; height: 80px; overflow: visible; } .ds-wire, .ds-lever { stroke: var(--ink, #1b2747); stroke-width: 3; stroke-linecap: round; } .ds-lever { stroke-width: 4; transform-box: view-box; transform-origin: 96px 40px; transition: transform 220ms cubic-bezier(0.16,1,0.3,1); } .ds-terminal { fill: var(--paper, #f1f4f3); stroke: var(--ink, #1b2747); stroke-width: 3; } .ds-wire-out { transition: stroke 200ms cubic-bezier(0.16,1,0.3,1); } .ds-switch-state { font-size: 44px; line-height: 1; letter-spacing: 0.08em; -webkit-text-stroke: 0.045em currentColor; } .ds-switch[aria-checked='false'] .ds-lever { transform: rotate(-30deg); } .ds-switch[aria-checked='false'] .ds-wire-out { stroke: var(--ink-3, #627087); stroke-dasharray: 8 7; }"
+    },
+    {
+      "name": "Block",
+      "kind": "custom",
+      "refersTo": "block",
+      "description": "Block-diagram box with status beneath; busy, idle and fault states change line style as well as ink.",
+      "html": "<div class=\"ds-blocks\"><div class=\"ds-block\"><div class=\"ds-block-box\">CAMERA</div><p class=\"ds-block-status\">CONNECTED<small>8.2 FPS</small></p></div><div class=\"ds-block\" data-state=\"busy\"><div class=\"ds-block-box\">MODEL</div><p class=\"ds-block-status\">LOADING<small>&nbsp;</small></p></div><div class=\"ds-block\" data-state=\"fault\"><div class=\"ds-block-box\">CAMERA</div><p class=\"ds-block-status\">NO SIGNAL<small>RETRYING</small></p></div></div>",
+      "css": ".ds-blocks { display: flex; gap: 24px; font-family: osifont, 'DejaVu Sans Condensed', sans-serif; color: var(--ink, #1b2747); } .ds-block-box { display: grid; place-items: center; width: 170px; height: 80px; background: var(--paper, #f1f4f3); border: 2px solid var(--ink, #1b2747); font-size: 26px; letter-spacing: 0.08em; -webkit-text-stroke: 0.02em currentColor; transition: border-color 200ms cubic-bezier(0.16,1,0.3,1), color 200ms cubic-bezier(0.16,1,0.3,1); } .ds-block-status { margin: 10px 0 0; display: grid; justify-items: center; gap: 3px; font-size: 20px; letter-spacing: 0.06em; } .ds-block-status small { font-size: 16px; color: var(--ink-2, #44526e); letter-spacing: 0; } .ds-block[data-state='busy'] .ds-block-box { border-style: dashed; animation: ds-busy 1.2s steps(2, jump-none) infinite; } @keyframes ds-busy { from { border-color: var(--ink, #1b2747); } to { border-color: var(--nonrepro, #a9c4d6); } } .ds-block[data-state='fault'] .ds-block-box { border-color: var(--fault, #9f1239); color: var(--fault, #9f1239); background: repeating-linear-gradient(-45deg, var(--paper, #f1f4f3) 0 9px, var(--fault-tint, #f3dbe2) 9px 12px); } .ds-block[data-state='fault'] .ds-block-status { color: var(--fault, #9f1239); } @media (prefers-reduced-motion: reduce) { .ds-block-box { animation: none !important; } }"
+    },
+    {
+      "name": "Parts List Row",
+      "kind": "card",
+      "refersTo": "bom",
+      "description": "Ruled BOM row: schematic symbol in class ink, part name, presence mark, designators, display quantity.",
+      "html": "<table class=\"ds-bom\"><colgroup><col style=\"width:90px\"><col><col style=\"width:150px\"></colgroup><thead><tr><th colspan=\"2\">PART</th><th class=\"ds-qty\">QTY</th></tr></thead><tbody><tr class=\"ds-part ds-res\"><td class=\"ds-sym\"><svg viewBox=\"0 0 64 24\"><polyline points=\"0,12 12,12 16,4 24,20 32,4 40,20 48,4 52,12 64,12\"/></svg></td><td><span class=\"ds-name\">RESISTORS</span><span class=\"ds-presence\"><i class=\"ds-mark\"></i>PRESENT</span><span class=\"ds-desig\">R1 R2 R3</span></td><td class=\"ds-qty\"><span class=\"ds-num\">3</span></td></tr><tr class=\"ds-part ds-cap ds-absent\"><td class=\"ds-sym\"><svg viewBox=\"0 0 64 24\"><path d=\"M0 12H28M28 2V22M36 2V22M36 12H64\"/></svg></td><td><span class=\"ds-name\">CAPACITORS</span><span class=\"ds-presence\"><i class=\"ds-mark\"></i>NOT PRESENT</span><span class=\"ds-desig\">&nbsp;</span></td><td class=\"ds-qty\"><span class=\"ds-num\">0</span></td></tr></tbody></table>",
+      "css": ".ds-bom { width: 600px; border-collapse: collapse; table-layout: fixed; background: var(--paper, #f1f4f3); border: 2px solid var(--ink, #1b2747); color: var(--ink, #1b2747); font-family: osifont, 'DejaVu Sans Condensed', sans-serif; } .ds-bom th { height: 32px; padding: 4px 12px 0; font-size: 14px; font-weight: normal; letter-spacing: 0.1em; text-align: left; color: var(--ink-2, #44526e); border-bottom: 1.5px solid var(--ink, #1b2747); } .ds-bom td { padding: 0 12px; border-top: 1px solid var(--ink, #1b2747); vertical-align: middle; } .ds-bom th + th, .ds-bom td + td { border-left: 1px solid var(--ink, #1b2747); } .ds-bom .ds-qty { text-align: right; } .ds-part { height: 108px; } .ds-sym { padding: 0; text-align: center; } .ds-sym svg { width: 64px; height: 24px; overflow: visible; fill: none; stroke-width: 2.6; stroke-linejoin: round; stroke-linecap: round; } .ds-res .ds-sym svg { stroke: var(--res, #c2410c); } .ds-cap .ds-sym svg { stroke: var(--cap, #0f766e); } .ds-name { display: block; font-size: 32px; line-height: 1.1; letter-spacing: 0.06em; -webkit-text-stroke: 0.025em currentColor; } .ds-presence { display: flex; align-items: center; gap: 10px; margin-top: 6px; font-size: 28px; line-height: 1; letter-spacing: 0.05em; } .ds-mark { width: 18px; height: 18px; border: 2px dashed var(--ink-3, #627087); } .ds-res:not(.ds-absent) .ds-presence { color: var(--res, #c2410c); -webkit-text-stroke: 0.04em currentColor; } .ds-res:not(.ds-absent) .ds-mark { background: var(--res, #c2410c); border: 2px solid var(--res, #c2410c); } .ds-absent .ds-presence { color: var(--ink-2, #44526e); } .ds-desig { display: block; margin-top: 4px; font-size: 20px; line-height: 1.3; color: var(--ink-2, #44526e); } .ds-num { font-size: 96px; line-height: 1; -webkit-text-stroke: 0.035em currentColor; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Part Mark",
+      "kind": "custom",
+      "refersTo": "part-flag-resistor",
+      "description": "Net-label annotation on the camera: class-ink box over a paper keyline, with a solid flag lettered designator and confidence.",
+      "html": "<svg class=\"ds-marks\" viewBox=\"0 0 300 140\"><rect class=\"ds-bg\" width=\"300\" height=\"140\"/><g class=\"ds-mk-res\"><rect class=\"ds-keyline\" x=\"20\" y=\"50\" width=\"110\" height=\"50\"/><rect class=\"ds-box\" x=\"20\" y=\"50\" width=\"110\" height=\"50\"/><rect class=\"ds-flag-keyline\" x=\"18.5\" y=\"20.5\" width=\"91\" height=\"31\"/><rect class=\"ds-flag\" x=\"20\" y=\"22\" width=\"88\" height=\"28\"/><text class=\"ds-text\" x=\"28\" y=\"43\">R1 83%</text></g><g class=\"ds-mk-cap\"><rect class=\"ds-keyline\" x=\"170\" y=\"70\" width=\"110\" height=\"50\"/><rect class=\"ds-box\" x=\"170\" y=\"70\" width=\"110\" height=\"50\"/><rect class=\"ds-flag-keyline\" x=\"168.5\" y=\"40.5\" width=\"91\" height=\"31\"/><rect class=\"ds-flag\" x=\"170\" y=\"42\" width=\"88\" height=\"28\"/><text class=\"ds-text\" x=\"178\" y=\"63\">C1 91%</text></g></svg>",
+      "css": ".ds-marks { width: 300px; height: 140px; font-family: osifont, 'DejaVu Sans Condensed', sans-serif; } .ds-bg { fill: #4a4a46; } .ds-keyline { fill: none; stroke: var(--paper, #f1f4f3); stroke-width: 7; } .ds-box { fill: none; stroke-width: 3.5; } .ds-flag-keyline { fill: var(--paper, #f1f4f3); } .ds-mk-res .ds-box { stroke: var(--res, #c2410c); } .ds-mk-res .ds-flag { fill: var(--res, #c2410c); } .ds-mk-cap .ds-box { stroke: var(--cap, #0f766e); } .ds-mk-cap .ds-flag { fill: var(--cap, #0f766e); } .ds-text { fill: var(--paper, #f1f4f3); font-size: 19px; }"
+    },
+    {
+      "name": "Reference Table",
+      "kind": "card",
+      "refersTo": "refs",
+      "description": "Ruled per-part table; designators in class ink, confidence in tabular figures.",
+      "html": "<table class=\"ds-refs\"><colgroup><col style=\"width:90px\"><col style=\"width:110px\"><col style=\"width:90px\"><col></colgroup><thead><tr><th>REF</th><th class=\"ds-n\">CONF</th><th>ZONE</th><th>LOCATION</th></tr></thead><tbody><tr><td class=\"ds-ref ds-r\">R1</td><td class=\"ds-n\">83%</td><td>B1</td><td>Center-Left</td></tr><tr><td class=\"ds-ref ds-c\">C1</td><td class=\"ds-n\">91%</td><td>B2</td><td>Center</td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>",
+      "css": ".ds-refs { width: 600px; border-collapse: collapse; table-layout: fixed; background: var(--paper, #f1f4f3); border: 2px solid var(--ink, #1b2747); color: var(--ink, #1b2747); font-family: osifont, 'DejaVu Sans Condensed', sans-serif; } .ds-refs th { height: 30px; padding: 4px 12px 0; font-size: 14px; font-weight: normal; letter-spacing: 0.1em; text-align: left; color: var(--ink-2, #44526e); border-bottom: 1.5px solid var(--ink, #1b2747); } .ds-refs td { height: 30.5px; padding: 3.5px 12px 0; font-size: 20px; line-height: 1; border-top: 1px solid var(--ink, #1b2747); } .ds-refs th + th, .ds-refs td + td { border-left: 1px solid var(--ink, #1b2747); } .ds-n { text-align: right !important; font-variant-numeric: tabular-nums; } .ds-ref { -webkit-text-stroke: 0.03em currentColor; } .ds-r { color: var(--res, #c2410c); } .ds-c { color: var(--cap, #0f766e); }"
+    },
+    {
+      "name": "Title Block",
+      "kind": "nav",
+      "refersTo": "title-block-cell",
+      "description": "Ruled title block: wordmark, clock, field cells, and a hold-to-exit cell that fills with ink over 1s.",
+      "html": "<section class=\"ds-tb\"><div class=\"ds-tbc ds-tb-title\"><span class=\"ds-tb-name\">VIZION</span><span class=\"ds-tb-sub\">Resistor &amp; capacitor detector · Raspberry Pi 5</span></div><div class=\"ds-tbc ds-tb-time\"><span class=\"ds-tb-label\">TIME</span><span class=\"ds-tb-clock\">15:49:09</span></div><div class=\"ds-tbc ds-tb-first\"><span class=\"ds-tb-label\">DATE</span><span class=\"ds-tb-value\">08 OCT 2026</span></div><div class=\"ds-tbc\"><span class=\"ds-tb-label\">MODEL</span><span class=\"ds-tb-value\">YOLO26n</span></div><div class=\"ds-tbc\"><span class=\"ds-tb-label\">SHOWN FROM</span><span class=\"ds-tb-value\">25%</span></div><button class=\"ds-tbc ds-tb-exit\" type=\"button\"><span class=\"ds-tb-label\">EXIT</span><span class=\"ds-tb-value\">HOLD TO EXIT</span><span class=\"ds-exit-fill\"></span></button></section>",
+      "css": ".ds-tb { display: grid; grid-template-columns: 140px 130px 110px 220px; grid-template-rows: 104px 90px; width: 600px; background: var(--paper, #f1f4f3); border: 3px solid var(--ink, #1b2747); color: var(--ink, #1b2747); font-family: osifont, 'DejaVu Sans Condensed', sans-serif; } .ds-tbc { position: relative; display: flex; flex-direction: column; justify-content: space-between; min-width: 0; padding: 8px 11px 9px; border: 0; border-left: 1px solid var(--ink, #1b2747); border-top: 1px solid var(--ink, #1b2747); background: none; color: inherit; font: inherit; text-align: left; overflow: hidden; } .ds-tb-title { grid-column: 1 / 4; border-left: 0; border-top: 0; } .ds-tb-time { border-top: 0; } .ds-tb-first { border-left: 0; } .ds-tb-label { position: relative; z-index: 1; font-size: 12px; letter-spacing: 0.12em; color: var(--ink-2, #44526e); } .ds-tb-name { font-size: 54px; line-height: 0.95; letter-spacing: 0.16em; -webkit-text-stroke: 0.05em currentColor; } .ds-tb-sub { font-size: 15.5px; color: var(--ink-2, #44526e); } .ds-tb-clock { font-size: 46px; line-height: 1; font-variant-numeric: tabular-nums; -webkit-text-stroke: 0.035em currentColor; } .ds-tb-value { position: relative; z-index: 1; font-size: 20px; line-height: 1.1; } .ds-tb-exit { cursor: pointer; } .ds-tb-exit:hover { background: var(--paper-hi, #e3eaec); } .ds-tb-exit:focus-visible { outline: 2px dashed var(--ink, #1b2747); outline-offset: -6px; } .ds-exit-fill { position: absolute; inset: 0; background: var(--ink, #1b2747); transform: scaleX(0); transform-origin: left; } .ds-tb-exit:active .ds-exit-fill { transform: scaleX(1); transition: transform 1000ms linear; } .ds-tb-exit:active .ds-tb-label, .ds-tb-exit:active .ds-tb-value { color: var(--paper, #f1f4f3); transition: color 400ms linear 500ms; }"
+    },
+    {
+      "name": "Connection Banner",
+      "kind": "custom",
+      "refersTo": "link-banner",
+      "description": "Opaque film panel with a pen-4 red-pen border, shown over the dimmed sheet when the service connection is lost.",
+      "html": "<div class=\"ds-banner\" role=\"status\"><p class=\"ds-banner-title\">NO CONNECTION TO THE VIZION SERVICE</p><p class=\"ds-banner-detail\">Retrying every second. If this stays, restart with ./run_dashboard.sh</p></div>",
+      "css": ".ds-banner { display: grid; gap: 10px; max-width: 920px; padding: 30px 40px 26px; background: var(--paper, #f1f4f3); border: 3px solid var(--fault, #9f1239); text-align: center; font-family: osifont, 'DejaVu Sans Condensed', sans-serif; } .ds-banner p { margin: 0; } .ds-banner-title { font-size: 36px; letter-spacing: 0.04em; color: var(--fault, #9f1239); -webkit-text-stroke: 0.04em currentColor; } .ds-banner-detail { font-size: 22px; color: var(--ink-2, #44526e); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Drawing Sheet",
+    "overview": "Vizion's screen is an electronics drawing: drafting film, navy ink laid down at ISO pen widths, non-repro blue construction lines, and ISO 3098 lettering. Every surface is a drafted object with a real counterpart on a sheet: a framed drawing area with zone rulers, net-label flags on detected parts, a block diagram with a working switch, a ruled parts list, a reference table, a notes line and a title block. Nothing floats, glows or lifts; state is shown by changing the ink, the line style or the hatching.\n\nThe sheet is laid out once, at 1920×1080, and scales as one drawing. `1rem` is 10px at 1080p (`font-size: min(100vh / 108, 100vw / 192)` on `:root`), so every measurement in this file is a drawing measurement and the whole sheet keeps its proportions on any screen. Small lettering carries pixel floors (`max(1.4rem, 12px)` and similar) so it stays legible when the sheet shrinks.\n\nDensity is that of a working drawing: tight ruled cells, generous only where something must read from 3 m (counts, the switch state, the clock, the wordmark).",
+    "keyCharacteristics": [
+      "Flat drafting film with a 2rem non-repro dot grid; no shadows, no rounded containers.",
+      "One typeface (osifont, ISO 3098) at one weight; emphasis is pen weight, drawn with text stroke.",
+      "Strokes come from four ISO pen widths; line style (solid, dashed, hatched) carries state alongside colour.",
+      "Class inks are reserved: orange for resistors, teal for capacitors, red pen for faults only.",
+      "Real schematic symbols (zigzag resistor, two-plate capacitor, SPST switch), drawn as SVG."
+    ],
+    "rules": [
+      {
+        "name": "The Reserved Ink Rule",
+        "body": "Resistor ink, capacitor ink and red pen each name one thing. A colour that means \"resistor\" is never borrowed for emphasis, and red pen never appears unless something has failed.",
+        "section": "colors"
+      },
+      {
+        "name": "The Not By Colour Alone Rule",
+        "body": "Every coloured state also changes form: PRESENT fills the mark square, idle states dash the outline, faults hatch the block, the open switch dashes its wire. Remove the colour and the state still reads.",
+        "section": "colors"
+      },
+      {
+        "name": "The Pen Weight Rule",
+        "body": "osifont has one weight; never set `font-weight` for emphasis. Emphasis is drawn with `-webkit-text-stroke` in `currentColor`, from 0.02em (block names) through 0.035–0.045em (counts, switch state, PRESENT) to 0.05em (wordmark).",
+        "section": "typography"
+      },
+      {
+        "name": "The Lettering Floor Rule",
+        "body": "Any lettering below 2rem carries a pixel floor (`max(Nrem, 11–14px)`) so the scaled sheet never letters smaller than a reader can resolve. Designators use line-height 1.3, because osifont's capitals rise above the em box and a tighter line clips them.",
+        "section": "typography"
+      },
+      {
+        "name": "The Pen Hierarchy Rule",
+        "body": "Boundaries are ranked by ISO pen width, never by shadow: pen-1 (0.1rem) for internal rules, pen-2 (0.15rem) for header rules, pen-3 (0.2rem) for drawn objects and controls, pen-4 (0.3rem) for the sheet frame, title block and banners.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** measure everything in rem on the 1920×1080 drawing (1rem = 10px) and let the root font size scale the sheet; give any lettering under 2rem a pixel floor.",
+      "**Do** draw boundaries with the four pen widths (0.1, 0.15, 0.2, 0.3rem) and let line style (solid, dashed, hatched) carry state with colour.",
+      "**Do** keep every class colour bound to its class: resistor ink for resistors, capacitor ink for capacitors, red pen for faults only.",
+      "**Do** use real schematic symbols and drafting furniture (net-label flags, ruled tables, title-block cells, reference designators like R1, C1, S1) for new elements.",
+      "**Do** show emphasis with text stroke in `currentColor`, never with a heavier weight or a second typeface.",
+      "**Do** put a paper keyline under anything inked over the camera picture.",
+      "**Do** use the sheet ease-out (`cubic-bezier(0.16, 1, 0.3, 1)`) at 150–300ms, and stop all motion under reduced motion except hold-to-exit feedback."
+    ],
+    "donts": [
+      "**Don't** add shadows, glows, blur or smooth gradients; the only gradients on the sheet are the dot grid and 45° hatching.",
+      "**Don't** round container corners; round forms are kept to terminals and line caps.",
+      "**Don't** letter text in non-repro blue or grid dot.",
+      "**Don't** use red pen for anything but a fault or a lost connection.",
+      "**Don't** use icon fonts or emoji; a symbol is a drawn SVG schematic symbol or lettering.",
+      "**Don't** add a small tracked label above a heading as decoration; small tracked lettering names a field in a ruled cell or a table column, nothing else."
+    ]
+  }
+}

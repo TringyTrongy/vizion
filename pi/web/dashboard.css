@@ -1,0 +1,799 @@
+/* Vizion dashboard: an electronics drawing sheet.
+   Drafting film, navy drafting ink at ISO pen widths, non-repro blue construction lines,
+   ISO 3098 lettering (osifont). Laid out at 1920×1080 where 1rem = 10px; the whole sheet
+   scales with the screen. */
+
+@font-face {
+  font-family: "osifont";
+  src: url("/static/fonts/osifont-lgpl3fe.woff") format("woff");
+  font-display: block;
+}
+
+:root {
+  --paper: #f1f4f3;          /* drafting film */
+  --paper-hi: #e3eaec;       /* pressed / hovered areas */
+  --ink: #1b2747;            /* drafting ink */
+  --ink-2: #44526e;          /* printed form labels */
+  --ink-3: #627087;          /* idle, not-applicable (4.5:1 on paper) */
+  --nonrepro: #a9c4d6;       /* construction lines */
+  --dot: #cfdbe3;            /* editor grid */
+  --res: #c2410c;            /* resistor ink */
+  --cap: #0f766e;            /* capacitor ink */
+  --fault: #9f1239;          /* red pen: faults only */
+  --fault-tint: #f3dbe2;
+
+  /* ISO pen widths 0.25 / 0.35 / 0.5 / 0.7 mm */
+  --pen-1: 0.1rem;
+  --pen-2: 0.15rem;
+  --pen-3: 0.2rem;
+  --pen-4: 0.3rem;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  font-size: min(calc(100vh / 108), calc(100vw / 192));
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: "osifont", "DejaVu Sans Condensed", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  display: grid;
+  place-items: center;
+  background-image: radial-gradient(circle, var(--dot) 0.11rem, transparent 0.12rem);
+  background-size: 2rem 2rem;
+  background-position: center;
+}
+
+body.idle, body.idle * { cursor: none !important; }
+
+::selection { background: var(--nonrepro); color: var(--ink); }
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+button:focus-visible {
+  outline: var(--pen-3) dashed var(--ink);
+  outline-offset: 0.4rem;
+}
+
+p { margin: 0; }
+
+[hidden] { display: none !important; }
+
+/* ---------------------------------------------------------------- sheet */
+
+.sheet {
+  position: relative;
+  width: 192rem;
+  height: 108rem;
+  display: grid;
+  grid-template-columns: 2.4rem 2.8rem 122rem 2.4rem 60rem 2.4rem;
+  grid-template-rows: 2.4rem 2.8rem 96rem 4.4rem 2.4rem;
+  grid-template-areas:
+    ".  .      .     .  .    ."
+    ".  corner rx    .  col  ."
+    ".  ry     view  .  col  ."
+    ".  .      notes .  col  ."
+    ".  .      .     .  .    .";
+}
+
+/* drawing frame */
+.sheet::before {
+  content: "";
+  position: absolute;
+  inset: 1.1rem;
+  border: var(--pen-4) solid var(--ink);
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------- zone rulers */
+
+.corner {
+  grid-area: corner;
+  border: var(--pen-1) solid var(--ink);
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.ruler {
+  display: grid;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: var(--ink-2);
+}
+
+.ruler-x {
+  grid-area: rx;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: var(--pen-1) solid var(--ink);
+  border-right: var(--pen-1) solid var(--ink);
+}
+
+.ruler-y {
+  grid-area: ry;
+  grid-template-rows: repeat(3, 1fr);
+  border-left: var(--pen-1) solid var(--ink);
+  border-bottom: var(--pen-1) solid var(--ink);
+}
+
+.ruler span {
+  display: grid;
+  place-items: center;
+  transition: background-color 200ms var(--ease-out), color 200ms var(--ease-out);
+}
+
+.ruler-x span + span { border-left: var(--pen-1) solid var(--ink); }
+.ruler-y span + span { border-top: var(--pen-1) solid var(--ink); }
+
+/* a zone that holds a part */
+.ruler span.on {
+  background: rgb(169 196 214 / 0.55);
+  color: var(--ink);
+  -webkit-text-stroke: 0.05em currentColor;
+}
+
+/* ---------------------------------------------------------------- camera view */
+
+.view {
+  grid-area: view;
+  position: relative;
+  margin: 0;
+  background: var(--paper-hi);
+  outline: var(--pen-3) solid var(--ink);
+  overflow: hidden;
+}
+
+.view canvas,
+.view .overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.view canvas { transition: opacity 300ms var(--ease-out), filter 300ms var(--ease-out); }
+
+.overlay { overflow: visible; }
+
+.thirds line {
+  stroke: var(--nonrepro);
+  stroke-width: 1.5;
+  stroke-dasharray: 10 8;
+  vector-effect: non-scaling-stroke;
+}
+
+/* part boxes: a paper keyline under the class ink, so they read on any background */
+.mk-keyline, .mk-box, .mk-unknown-keyline, .mk-unknown {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+.mk-keyline, .mk-unknown-keyline { stroke: var(--paper); stroke-width: 7; }
+.mk-box { stroke-width: 3.5; }
+.mk-resistor .mk-box, .mk-resistor .mk-flag { stroke: var(--res); fill: var(--res); }
+.mk-capacitor .mk-box, .mk-capacitor .mk-flag { stroke: var(--cap); fill: var(--cap); }
+.mk-resistor .mk-box, .mk-capacitor .mk-box { fill: none; }
+.mk-flag { stroke-width: 0; }
+.mk-flag-keyline { fill: var(--paper); }
+.mk-text {
+  fill: var(--paper);
+  font-family: "osifont", sans-serif;
+  paint-order: stroke;
+}
+.mk-unknown { stroke: var(--ink); stroke-width: 3; stroke-dasharray: 9 6; }
+.mk-unknown-flag { fill: var(--ink); }
+
+.stamp {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  padding: 0.9rem 1.4rem 0.7rem;
+  background: var(--paper);
+  border: var(--pen-3) solid var(--ink);
+  font-size: 2.4rem;
+  line-height: 1;
+  letter-spacing: 0.06em;
+}
+
+.view-message {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 1.6rem;
+  padding: 6rem;
+  text-align: center;
+}
+
+.view-title {
+  font-size: 4.8rem;
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  -webkit-text-stroke: 0.04em currentColor;
+  text-wrap: balance;
+}
+
+.view-detail {
+  font-size: 2.6rem;
+  line-height: 1.3;
+  color: var(--ink-2);
+  max-width: 60ch;
+  text-wrap: balance;
+}
+
+.view:not([data-camera="ok"]) canvas { opacity: 0.28; filter: grayscale(1); }
+.view[data-camera="ok"] .view-message { display: none; }
+
+.view[data-camera="lost"] .view-message,
+.view[data-camera="stalled"] .view-message {
+  background: repeating-linear-gradient(-45deg, transparent 0 1.6rem, rgb(159 18 57 / 0.10) 1.6rem 1.8rem);
+}
+.view[data-camera="lost"] .view-title,
+.view[data-camera="stalled"] .view-title { color: var(--fault); }
+
+/* ---------------------------------------------------------------- notes */
+
+.notes {
+  grid-area: notes;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: start;
+  gap: 0.2rem 2.2rem;
+  padding-top: 0.6rem;
+  font-size: max(1.4rem, 12px);
+  line-height: 1.2;
+  color: var(--ink-2);
+}
+
+.notes-label {
+  color: var(--ink);
+  letter-spacing: 0.08em;
+  text-decoration: underline;
+  text-decoration-thickness: var(--pen-1);
+  text-underline-offset: 0.3rem;
+}
+
+/* ---------------------------------------------------------------- right column */
+
+.column {
+  grid-area: col;
+  display: grid;
+  grid-template-rows: 19rem 42.6rem minmax(0, 1fr) 19.4rem;
+  gap: 1.2rem;
+  min-height: 0;
+}
+
+/* ---------------------------------------------------------------- block diagram + S1 */
+
+.chain {
+  display: grid;
+  grid-template-columns: 17rem 1fr 17rem;
+  grid-template-rows: 3.6rem 8rem 1fr;
+}
+
+.block {
+  grid-row: 1 / 4;
+  display: grid;
+  grid-template-rows: subgrid;
+}
+
+.block-box {
+  grid-row: 2;
+  display: grid;
+  place-items: center;
+  background: var(--paper);
+  border: var(--pen-3) solid var(--ink);
+  font-size: 2.6rem;
+  letter-spacing: 0.08em;
+  -webkit-text-stroke: 0.02em currentColor;
+  transition: border-color 200ms var(--ease-out), color 200ms var(--ease-out);
+}
+
+.block-status {
+  grid-row: 3;
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  gap: 0.3rem;
+  padding-top: 1rem;
+  text-align: center;
+}
+
+.block-status span:first-child {
+  font-size: 2rem;
+  letter-spacing: 0.06em;
+  -webkit-text-stroke: 0.02em currentColor;
+}
+
+.block-status span:last-child {
+  font-size: max(1.6rem, 11px);
+  color: var(--ink-2);
+}
+
+.block[data-state="busy"] .block-box {
+  border-style: dashed;
+  animation: busy 1.2s steps(2, jump-none) infinite;
+}
+
+.block[data-state="idle"] .block-box {
+  border-style: dashed;
+  border-color: var(--ink-3);
+  color: var(--ink-3);
+}
+.block[data-state="idle"] .block-status { color: var(--ink-3); }
+
+.block[data-state="fault"] .block-box {
+  border-color: var(--fault);
+  color: var(--fault);
+  background: repeating-linear-gradient(-45deg, var(--paper) 0 0.9rem, var(--fault-tint) 0.9rem 1.2rem);
+}
+.block[data-state="fault"] .block-status span:first-child { color: var(--fault); }
+
+@keyframes busy {
+  from { border-color: var(--ink); }
+  to { border-color: var(--nonrepro); }
+}
+
+.switch {
+  grid-column: 2;
+  grid-row: 1 / 4;
+  display: grid;
+  grid-template-rows: subgrid;
+  justify-items: center;
+  border-radius: 0;
+  transition: background-color 150ms var(--ease-out);
+}
+
+.switch:hover { background: rgb(169 196 214 / 0.18); }
+.switch:active { background: var(--paper-hi); }
+
+.switch-ref {
+  align-self: end;
+  font-size: max(1.7rem, 11px);
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+}
+
+.switch-art {
+  grid-row: 2;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.switch-art .wire,
+.switch-art .lever {
+  stroke: var(--ink);
+  stroke-width: 3;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.switch-art .lever {
+  stroke-width: 4;
+  transform-box: view-box;
+  transform-origin: 96px 40px;
+  transition: transform 220ms var(--ease-out);
+}
+
+.switch-art .terminal {
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+}
+
+.switch-art .wire-out { transition: stroke 200ms var(--ease-out); }
+
+.pulse {
+  fill: var(--ink);
+  animation: travel 420ms linear forwards;
+}
+
+@keyframes travel {
+  from { transform: translateX(0); opacity: 1; }
+  85% { opacity: 1; }
+  to { transform: translateX(260px); opacity: 0; }
+}
+
+.switch-state {
+  grid-row: 3;
+  padding-top: 0.6rem;
+  font-size: 4.4rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  -webkit-text-stroke: 0.045em currentColor;
+}
+
+.switch[aria-checked="false"] .lever { transform: rotate(-30deg); }
+.switch[aria-checked="false"] .wire-out {
+  stroke: var(--ink-3);
+  stroke-dasharray: 8 7;
+}
+
+/* ---------------------------------------------------------------- tables (BOM, refs) */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  background: var(--paper);
+  border: var(--pen-3) solid var(--ink);
+}
+
+th {
+  height: 3.2rem;
+  padding: 0.4rem 1.2rem 0;
+  font-size: max(1.4rem, 11px);
+  font-weight: normal;
+  letter-spacing: 0.1em;
+  text-align: left;
+  color: var(--ink-2);
+  border-bottom: var(--pen-2) solid var(--ink);
+}
+
+td {
+  padding: 0 1.2rem;
+  border-top: var(--pen-1) solid var(--ink);
+  vertical-align: middle;
+}
+
+th + th, td + td { border-left: var(--pen-1) solid var(--ink); }
+
+.qty { text-align: right; }
+
+/* ---------------------------------------------------------------- BOM */
+
+.bom col.c-sym { width: 9rem; }
+.bom col.c-qty { width: 15rem; }
+.bom tr.part { height: 10.8rem; }
+.bom tr.unknown { height: 11.2rem; }
+.bom tr.total { height: 6.6rem; }
+
+.sym { padding: 0; text-align: center; }
+.sym svg { width: 6.4rem; height: 2.4rem; overflow: visible; }
+.sym-part polyline, .sym-part path {
+  fill: none;
+  stroke-width: 2.6;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.part[data-cls="resistor"] .sym-part * { stroke: var(--res); }
+.part[data-cls="capacitor"] .sym-part * { stroke: var(--cap); }
+
+/* The physical indicator LED for this class, drawn as its schematic symbol: the diode fills with
+   the class ink and the light arrows appear while the real LED is lit. */
+.led {
+  display: grid;
+  justify-items: center;
+  gap: 0.2rem;
+  margin-top: 1.4rem;
+}
+.led[hidden] { display: none; }
+.sym .led-art { width: 4.4rem; height: 3rem; }
+.led-body, .led-diode, .led-rays {
+  fill: none;
+  stroke: var(--ink-3);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  transition: fill 80ms linear, stroke 80ms linear, opacity 80ms linear;
+}
+.led-rays { opacity: 0; }
+.led[data-ready="false"] .led-body,
+.led[data-ready="false"] .led-diode { stroke-dasharray: 3 3; }
+.led-ref {
+  font-size: max(1.2rem, 11px);
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.part[data-cls="resistor"] .led[data-lit="true"] .led-diode { fill: var(--res); stroke: var(--res); }
+.part[data-cls="capacitor"] .led[data-lit="true"] .led-diode { fill: var(--cap); stroke: var(--cap); }
+.part[data-cls="resistor"] .led[data-lit="true"] :is(.led-body, .led-rays) { stroke: var(--res); }
+.part[data-cls="capacitor"] .led[data-lit="true"] :is(.led-body, .led-rays) { stroke: var(--cap); }
+.led[data-lit="true"] .led-rays { opacity: 1; }
+.led[data-lit="true"] .led-ref { color: var(--ink); }
+.unknown .sym rect { fill: none; stroke: var(--ink); stroke-width: 2; stroke-dasharray: 4 3; }
+.unknown .sym text { fill: var(--ink); font-size: 18px; text-anchor: middle; font-family: "osifont", sans-serif; }
+
+.part-cell, .unknown-cell { overflow: hidden; }
+
+.part-cell {
+  display: table-cell;
+}
+
+.part-name {
+  display: block;
+  font-size: 3.2rem;
+  line-height: 1.1;
+  letter-spacing: 0.06em;
+  -webkit-text-stroke: 0.025em currentColor;
+}
+
+.presence {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.6rem;
+  font-size: 2.8rem;
+  line-height: 1;
+  letter-spacing: 0.05em;
+}
+
+.mark {
+  flex: none;
+  width: 1.8rem;
+  height: 1.8rem;
+  border: var(--pen-3) dashed var(--ink-3);
+  transition: background-color 200ms var(--ease-out), border-color 200ms var(--ease-out);
+}
+
+.designators {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: max(2rem, 14px);
+  line-height: 1.3;  /* osifont's capitals rise above the em box; a tighter line clips C into L */
+  color: var(--ink-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.part[data-present="yes"] .presence-text { -webkit-text-stroke: 0.04em currentColor; }
+.part[data-cls="resistor"][data-present="yes"] .mark { background: var(--res); border: var(--pen-3) solid var(--res); }
+.part[data-cls="capacitor"][data-present="yes"] .mark { background: var(--cap); border: var(--pen-3) solid var(--cap); }
+.part[data-cls="resistor"][data-present="yes"] .presence-text { color: var(--res); }
+.part[data-cls="capacitor"][data-present="yes"] .presence-text { color: var(--cap); }
+.part[data-present="no"] .presence-text { color: var(--ink-2); }
+.part[data-present="unknown"] .presence-text,
+.part[data-present="unknown"] .part-name { color: var(--ink-3); }
+
+.qty-num {
+  font-size: 9.6rem;
+  line-height: 1;
+  -webkit-text-stroke: 0.035em currentColor;
+  font-variant-numeric: tabular-nums;
+}
+
+.part[data-present="unknown"] .qty-num,
+.total[data-known="no"] .qty-num { color: var(--ink-3); -webkit-text-stroke: 0; }
+
+.total .qty-num { font-size: 6rem; }
+.total-label {
+  text-align: right;
+  font-size: 2.6rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-2);
+}
+.total-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.6rem;
+}
+
+/* unrecognised objects */
+.unknown-cell { padding-top: 0.8rem; padding-bottom: 0.8rem; }
+
+.unknown-cell .part-name { font-size: 2.4rem; }
+
+.unknown-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.6rem;
+  margin-top: 0.4rem;
+}
+
+.unknown-line .presence { margin: 0; font-size: 2.6rem; }
+
+.unknown-detail {
+  display: block;
+  margin-top: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.unknown-detail {
+  font-size: max(1.6rem, 12px);
+  line-height: 1.25;
+  color: var(--ink-2);
+}
+.unknown-detail.is-error { color: var(--fault); }
+.unknown-detail.is-ok { color: var(--ink); }
+
+.unknown[data-state="present"] .mark { background: var(--ink); border: var(--pen-3) solid var(--ink); }
+.unknown[data-state="present"] .presence-text { -webkit-text-stroke: 0.04em currentColor; }
+.unknown[data-state="relearn"] .presence-text { color: var(--fault); }
+.unknown[data-state="no_camera"] .presence-text,
+.unknown[data-state="off"] .presence-text,
+.unknown[data-state="waiting"] .presence-text,
+.unknown[data-state="not_learned"] .presence-text { color: var(--ink-3); }
+
+.cmd {
+  flex: none;
+  min-height: 4.4rem;
+  padding: 0.9rem 1.4rem 0.6rem;
+  border: var(--pen-3) solid var(--ink);
+  background: var(--paper);
+  font-size: max(1.7rem, 11px);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  position: relative;
+  transition: background-color 150ms var(--ease-out), color 150ms var(--ease-out);
+}
+
+/* On a small touchscreen the drawn button shrinks with the sheet; its touch area never goes below 44px. */
+.cmd::after {
+  content: "";
+  position: absolute;
+  inset: min(0px, calc((4.4rem - 44px) / 2));
+}
+.cmd:hover { background: var(--paper-hi); }
+.cmd:active { background: var(--ink); color: var(--paper); }
+.cmd:disabled { cursor: default; color: var(--ink-3); border-color: var(--ink-3); border-style: dashed; background: var(--paper); }
+
+/* ---------------------------------------------------------------- refs */
+
+.refs { min-height: 0; overflow: hidden; display: flex; }
+.refs table { height: 100%; }
+.refs tbody tr { height: 3.05rem; }
+.refs tbody tr.filler td { height: auto; }
+.refs col.c-ref { width: 9rem; }
+.refs col.c-conf { width: 11rem; }
+.refs col.c-zone { width: 9rem; }
+.refs .num { text-align: right; }
+.refs th { height: 3rem; }
+.refs td {
+  height: 3.05rem;
+  font-size: 2rem;
+  line-height: 1;
+  padding-top: 0.35rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.refs td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.refs td.ref { -webkit-text-stroke: 0.03em currentColor; }
+.refs tr[data-cls="resistor"] td.ref { color: var(--res); }
+.refs tr[data-cls="capacitor"] td.ref { color: var(--cap); }
+.refs tr.empty td { color: var(--ink-2); font-size: 1.9rem; white-space: normal; padding-top: 0.8rem; padding-bottom: 0.6rem; line-height: 1.25; }
+.refs tr.empty.is-error td { color: var(--fault); }
+.refs tr.more td { color: var(--ink-2); font-size: max(1.7rem, 12px); }
+
+/* ---------------------------------------------------------------- title block */
+
+.title-block {
+  display: grid;
+  grid-template-columns: 14rem 13rem 11rem 22rem;
+  grid-template-rows: 10.4rem 1fr;
+  background: var(--paper);
+  border: var(--pen-4) solid var(--ink);
+}
+
+.tb-cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+  padding: 0.8rem 1.1rem 0.9rem;
+  border-left: var(--pen-1) solid var(--ink);
+  border-top: var(--pen-1) solid var(--ink);
+  text-align: left;
+  overflow: hidden;
+}
+
+.tb-title { grid-column: 1 / 4; border-left: 0; border-top: 0; }
+.tb-time { border-top: 0; }
+.tb-cell:nth-child(3) { border-left: 0; }
+
+.tb-label {
+  font-size: max(1.2rem, 11px);
+  letter-spacing: 0.12em;
+  color: var(--ink-2);
+}
+
+.tb-name {
+  font-size: 5.4rem;
+  line-height: 0.95;
+  letter-spacing: 0.16em;
+  -webkit-text-stroke: 0.05em currentColor;
+}
+
+.tb-sub { font-size: max(1.55rem, 11px); color: var(--ink-2); }
+
+.tb-clock {
+  font-size: 4.6rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  -webkit-text-stroke: 0.035em currentColor;
+}
+
+.tb-value { font-size: 2rem; line-height: 1.1; }
+.tb-value small { display: block; margin-top: 0.3rem; font-size: max(1.4rem, 11px); color: var(--ink-2); }
+
+.tb-exit { justify-content: space-between; }
+.tb-exit .tb-value { position: relative; z-index: 1; font-size: 1.9rem; letter-spacing: 0.06em; }
+.tb-exit .tb-label { position: relative; z-index: 1; }
+.tb-exit:hover { background: var(--paper-hi); }
+.tb-exit:focus-visible { outline-offset: -0.6rem; }
+
+.exit-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.tb-exit.holding .exit-fill { transform: scaleX(1); transition: transform 1000ms linear; }
+.tb-exit.holding .tb-value,
+.tb-exit.holding .tb-label { color: var(--paper); transition: color 400ms linear 500ms; }
+
+/* ---------------------------------------------------------------- lost connection */
+
+.link-banner {
+  grid-area: 3 / 3 / 4 / 4;
+  align-self: center;
+  justify-self: center;
+  z-index: 2;
+  display: grid;
+  gap: 1rem;
+  width: 92rem;
+  padding: 3rem 4rem 2.6rem;
+  background: var(--paper);
+  border: var(--pen-4) solid var(--fault);
+  text-align: center;
+}
+.link-title { font-size: 3.6rem; letter-spacing: 0.04em; color: var(--fault); -webkit-text-stroke: 0.04em currentColor; }
+.link-detail { font-size: 2.2rem; color: var(--ink-2); }
+
+.sheet[data-link="lost"] .column,
+.sheet[data-link="stopped"] .column,
+.sheet[data-link="lost"] .view canvas,
+.sheet[data-link="stopped"] .view canvas { opacity: 0.35; }
+.sheet[data-link="stopped"] .link-banner { border-color: var(--ink); }
+.sheet[data-link="stopped"] .link-title { color: var(--ink); }
+
+/* ---------------------------------------------------------------- small screens */
+
+/* Below 1600×900 the sheet's small lettering hits its 12px floor and needs more room: the camera
+   gives up 6rem of width (keeping its shape), the notes strip and the right column get it. */
+@media (max-width: 1599px), (max-height: 899px) {
+  .sheet {
+    grid-template-columns: 2.4rem 2.8rem 116rem 2.4rem 66rem 2.4rem;
+    grid-template-rows: 2.4rem 2.8rem 91.3rem 9.1rem 2.4rem;
+  }
+  .title-block { grid-template-columns: 14rem 13rem 15rem 1fr; }
+}
+
+/* ---------------------------------------------------------------- motion preferences */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0ms !important; animation: none !important; }
+  .tb-exit.holding .exit-fill { transition: transform 1000ms linear !important; }
+}

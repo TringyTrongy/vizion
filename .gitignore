@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Training outputs and raw downloads (rebuild with scripts/)
+runs/
+data/raw/
+models/pretrained/
+*.cache
+data/vizion/.webcam_added
+
+# Made on the Pi while running
+pi/empty_table.png
+pi/captures/
+*.log

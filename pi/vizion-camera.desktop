@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Vizion Camera
+Comment=Live USB camera preview with a Capture button
+Exec=/home/vizion/vizion/run_preview.sh
+Icon=camera-video
+Terminal=false
+Categories=Graphics;

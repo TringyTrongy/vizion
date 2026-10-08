@@ -48,7 +48,7 @@ On frames from the Pi's own webcam, at input 480 and confidence 0.4:
 
 ## How it was trained
 
-The full dataset is in [`../dataset`](../dataset).
+The full dataset is in [`../data`](../data).
 
 | Source | Licence | How it was used |
 |---|---|---|
@@ -66,6 +66,19 @@ Half of the public training images were also degraded to look like the webcam: s
 | Test | 111 | 75 | 162 | 24 |
 
 Augmentation: the Ultralytics defaults, plus vertical flips (`flipud=0.5`) and rotation up to ±10° (`degrees=10`).
+
+## Colour balance before detection
+
+In bright light the webcam's automatic white balance tints the whole picture cyan: red averaged 136 against about 190 for green and blue. Blue capacitors wash out, and the model's capacitor confidence fell to about 0.3, so capacitors appeared late or flickered. The Pi app therefore balances each frame to grey before detection (`balance_colours` in [`../pi/detector.py`](../pi/detector.py)): it scales the three colour channels so the scene averages to grey, ignores clipped and dark pixels, and limits the gains to 0.5–2. It costs about 4 ms per frame on the Pi.
+
+| Check (input 480, confidence 0.25) | Without | With colour balance |
+|---|---|---|
+| 24 bright live frames: capacitor found | 15 / 24 (scores 0.14–0.4) | **24 / 24** (0.86–0.91) |
+| 15 labelled webcam frames, 52 parts | 52 found, 0 false | 52 found, 0 false |
+| Public test split, 237 parts | 220 found, 41 false | 219 found, 39 false |
+| 11 room frames with no components | 0 false boxes | 0 false boxes |
+
+Live on the Pi, the capacitor's tracked confidence went from 0.31–0.68 to a steady 0.89–0.91. If you run the model outside the Pi app, apply the same step to the frame first.
 
 ## Using the model
 
@@ -96,7 +109,7 @@ To change the input size, re-export from the PyTorch weights:
 - **Capacitors are harder than resistors.** Tiny ceramic and MLCC capacitors account for most misses on the public validation set (recall 0.74 at 480).
 - **It finds parts but does not read them.** No resistor values from the colour bands, and no capacitor ratings.
 - **Look-alikes.** Inductors, diodes and thermistors were trained as negatives, but confusion is still possible.
-- **Lighting.** The webcam's auto-exposure cannot be locked. In dim light the frame rate falls and images get noisier, so steady bright light works best.
+- **Lighting.** The webcam's auto-exposure and white balance cannot be locked. In dim light the frame rate falls and images get noisier. In bright light the picture turns cyan; see [Colour balance](#colour-balance-before-detection) for the fix the Pi app applies.
 
 ## Licence
 
