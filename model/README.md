@@ -48,6 +48,8 @@ On frames from the Pi's own webcam, at input 480 and confidence 0.4:
 
 ## How it was trained
 
+The full dataset is in [`../dataset`](../dataset).
+
 | Source | Licence | How it was used |
 |---|---|---|
 | [ElectroCom61](https://data.mendeley.com/datasets/6scy6h8sjz/2), 61 component classes, 640×640 | CC BY 4.0 | Its 6 capacitor classes merged into one. Its boxes include the leads, so capacitor boxes were shrunk to the body automatically (GrabCut, then a morphological opening removes the thin legs); images where that failed were dropped. Images containing resistors were dropped. Images with look-alike parts (inductors, diodes, Zener diodes, fuses, NTC thermistors) were kept as negatives. |

@@ -1,0 +1,6 @@
+# Held-out real-camera scene (s3). Paths are relative to this file.
+train: images
+val: images
+names:
+  0: resistor
+  1: capacitor

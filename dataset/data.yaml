@@ -1,0 +1,7 @@
+# Vizion detector dataset (YOLO format). Paths are relative to this file.
+train: train/images
+val: val/images
+test: test/images
+names:
+  0: resistor
+  1: capacitor
