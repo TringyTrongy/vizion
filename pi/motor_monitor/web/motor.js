@@ -14,6 +14,7 @@ const EVENT_CHIPS = {
 };
 
 const kiosk = new URLSearchParams(location.search).has("kiosk");
+const narrow = window.matchMedia("(max-width: 700px)");
 let seq = 0;
 let samples = [];  // [seq, t, told°, seen°, mismatch, state code]
 let last = null;
@@ -121,10 +122,14 @@ function fitLamp() {
 }
 
 function renderMatch(s) {
-  const limit = s.now.limit;
   let value = s.now.mismatch;
   let note = "Compared with the master images at the same commanded position.";
-  if (s.state === "ANOMALY" && s.trip && s.trip.score !== undefined) {
+  let limit = s.now.limit;
+  if (s.state === "LEARNING") {
+    value = null;
+    limit = null;
+    note = "Learning: the limit is set when it finishes.";
+  } else if (s.state === "ANOMALY" && s.trip && s.trip.score !== undefined) {
     value = s.trip.score;
     note = "Held at the frame that tripped tool 01.";
   } else if (!limit) {
@@ -189,8 +194,9 @@ function renderPanes(s) {
   const judged = ["WATCHING", "STOPPED", "ANOMALY"].includes(st) && limit;
   for (const which of ["expected", "live"]) {
     const roi = $(`roi-${which}`);
-    roi.hidden = !box;
-    if (!box) continue;
+    const shows = box && !["LEARNING", "NOT LEARNED"].includes(st);
+    roi.hidden = !shows;
+    if (!shows) continue;
     roi.style.left = `${box[0] * 100}%`;
     roi.style.top = `${box[1] * 100}%`;
     roi.style.width = `${box[2] * 100}%`;
@@ -200,13 +206,31 @@ function renderPanes(s) {
     roi.classList.toggle("ng", which === "live" && judged && !!over);
   }
   const shown = held ? s.trip.score : s.now.mismatch;
-  setText($("tool-tag"), shown === null || shown === undefined ? "01 Arm match" : `01 Arm match ${fmt(shown, 2)}`);
-
-  const heldEl = $("held");
-  heldEl.hidden = !held;
-  if (held) {
-    heldEl.innerHTML = `<b>Held frame</b><span>${esc(clockOf(s.trip.time))} · tool 01 tripped at mismatch ${fmt(s.trip.score, 2)}, limit ${fmt(s.trip.limit, 2)}. The servo is not being driven.</span>`;
+  let tag = "01 Arm match";
+  if (shown !== null && shown !== undefined && limit) {
+    const verdict = held ? "Anomaly" : shown > limit ? "Over" : "OK";
+    tag = narrow.matches ? `01 ${fmt(shown, 2)}/${fmt(limit, 2)} ${verdict}`
+      : `01 Arm match ${fmt(shown, 2)} / ${fmt(limit, 2)} ${verdict}`;
   }
+  setText($("tool-tag"), tag);
+
+  // The strip under the panes: the frame being inspected, or the HELD FRAME stamp after a trip.
+  $("strip").classList.toggle("held", !!held);
+  let label = `Frame ${s.frames}`;
+  let text;
+  if (held) {
+    label = "Held frame";
+    text = `${clockOf(s.trip.time)} · tool 01 tripped at mismatch ${fmt(s.trip.score, 2)}, limit ${fmt(s.trip.limit, 2)}. The servo is not being driven.`;
+  } else if (s.now.camera_age_s === null || s.now.camera_age_s > 2) {
+    label = "No picture";
+    text = "The camera isn't sending frames.";
+  } else if (st === "WATCHING") text = `compared with the master image taken at ${deg(s.now.command_deg)}`;
+  else if (st === "STOPPED") text = "compared with the master image of the arm parked in the middle";
+  else if (st === "LEARNING") text = `recording master images: ${s.learn ? s.learn.pictures : 0} so far`;
+  else if (st === "NO CAMERA") text = "the motor was stopped while the camera was silent";
+  else text = "nothing to compare with until Learn normal records the master images";
+  setText($("strip-label"), label);
+  setText($("strip-text"), text);
 }
 
 async function loadPlate(which, key, url) {
@@ -270,7 +294,7 @@ function renderTools(s) {
   const judged = ["WATCHING", "STOPPED", "ANOMALY"].includes(st) && limit;
   const value = st === "ANOMALY" && s.trip ? s.trip.score : s.now.mismatch;
   setText(t1.m, judged ? fmt(value) : "–");
-  setText(t1.a, limit ? `limit ${fmt(limit)}` : "not learned");
+  setText(t1.a, st === "LEARNING" ? "set after learning" : limit ? `limit ${fmt(limit)}` : "not learned");
   if (!judged || value === null) judge(t1.j, "–", "");
   else if (st === "ANOMALY") judge(t1.j, "Anomaly", "ng");
   else if (value > limit) judge(t1.j, "Over", "ng");
@@ -308,7 +332,7 @@ function renderTools(s) {
   setText($("c-sweeps"), String(c.sweeps));
 
   const m = s.master;
-  setText($("learned-line"), m
+  setText($("learned-line"), m && st !== "LEARNING"
     ? `Normal learned ${m.learned_at.slice(11, 16)} from ${m.images} master images. Normal frames differ by ${fmt(m.normal_p50)} (99 in 100 under ${fmt(m.normal_p99)}), so the limit is ${fmt(m.limit)}.`
     : "");
   const notes = [...new Set(s.rig.notes)];
@@ -333,7 +357,7 @@ function renderTrends() {
   const newest = samples.length ? samples[samples.length - 1][1] : 0;
   const t0 = newest - WINDOW_S;
   const xOf = (t, w) => pad.l + ((t - t0) / WINDOW_S) * (w - pad.l - pad.r);
-  const limit = last && last.now.limit;
+  const limit = last && last.state !== "LEARNING" && last.now.limit;  // no limit while a new one is learned
 
   // Bands where the motor was not sweeping, and anomaly marks: shared by both charts.
   const bands = [];

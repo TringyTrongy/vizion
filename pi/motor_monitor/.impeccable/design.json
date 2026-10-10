@@ -1,0 +1,518 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-10T16:00:00Z",
+  "title": "Design System: Vizion Motor",
+  "extensions": {
+    "scope": "Vizion Motor surface only (pi/motor_monitor/web/). The root DESIGN.md and .impeccable/design.json belong to the camera dashboard.",
+    "colorMeta": {
+      "panel": {
+        "role": "neutral",
+        "displayName": "Panel Grey",
+        "canonical": "oklch(93.3% 0.003 229)",
+        "tonalRamp": [
+          "#0a0b0c",
+          "#232425",
+          "#3e4041",
+          "#5c5e5f",
+          "#7c7d7e",
+          "#9d9fa0",
+          "#c2c4c5",
+          "#edeff0"
+        ]
+      },
+      "panel-2": {
+        "role": "neutral",
+        "displayName": "Window Strip Grey",
+        "canonical": "oklch(89.8% 0.008 242)",
+        "tonalRamp": [
+          "#080c0e",
+          "#212527",
+          "#3c4043",
+          "#5a5e62",
+          "#797e81",
+          "#9a9fa3",
+          "#c0c5c9",
+          "#eaeff3"
+        ]
+      },
+      "well": {
+        "role": "neutral",
+        "displayName": "Well White",
+        "canonical": "oklch(100.0% 0.000 90)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#404040",
+          "#5d5d5d",
+          "#7d7d7d",
+          "#9e9e9e",
+          "#c4c4c4",
+          "#eeeeee"
+        ]
+      },
+      "navy": {
+        "role": "primary",
+        "displayName": "Panel Navy",
+        "canonical": "oklch(28.1% 0.035 254)",
+        "tonalRamp": [
+          "#030b19",
+          "#182535",
+          "#334152",
+          "#505f71",
+          "#6f7f92",
+          "#90a0b4",
+          "#b5c6db",
+          "#e4f0fe"
+        ]
+      },
+      "navy-raised": {
+        "role": "primary",
+        "displayName": "Raised Navy",
+        "canonical": "oklch(35.8% 0.043 253)",
+        "tonalRamp": [
+          "#000b1d",
+          "#142539",
+          "#2f4156",
+          "#4c5f76",
+          "#6b7f97",
+          "#8ca1b9",
+          "#b1c6e0",
+          "#e3f0ff"
+        ]
+      },
+      "title-keyline": {
+        "role": "neutral",
+        "displayName": "Title Keyline",
+        "canonical": "oklch(58.2% 0.034 250)",
+        "tonalRamp": [
+          "#020c19",
+          "#172534",
+          "#324151",
+          "#4f5f71",
+          "#6e7f91",
+          "#8fa1b3",
+          "#b4c6da",
+          "#e3f0ff"
+        ]
+      },
+      "title-text": {
+        "role": "neutral",
+        "displayName": "Title Lettering",
+        "canonical": "oklch(84.4% 0.018 248)",
+        "tonalRamp": [
+          "#060c12",
+          "#1d252c",
+          "#394149",
+          "#565f67",
+          "#757e88",
+          "#96a0a9",
+          "#bbc5cf",
+          "#e6f0fa"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Secondary Ink",
+        "canonical": "oklch(40.3% 0.035 252)",
+        "tonalRamp": [
+          "#020c19",
+          "#172534",
+          "#324152",
+          "#505f71",
+          "#6f7f92",
+          "#8fa0b4",
+          "#b4c6da",
+          "#e4f0fe"
+        ]
+      },
+      "ink-3": {
+        "role": "neutral",
+        "displayName": "Quiet Ink",
+        "canonical": "oklch(49.1% 0.026 250)",
+        "tonalRamp": [
+          "#040c16",
+          "#1b2530",
+          "#36414d",
+          "#535f6c",
+          "#727f8c",
+          "#93a0ae",
+          "#b8c6d5",
+          "#e3f0fe"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Rule Grey",
+        "canonical": "oklch(80.0% 0.015 245)",
+        "tonalRamp": [
+          "#060c11",
+          "#1e252b",
+          "#394147",
+          "#575f66",
+          "#767e86",
+          "#97a0a7",
+          "#bcc5cd",
+          "#e6f0f8"
+        ]
+      },
+      "ok": {
+        "role": "secondary",
+        "displayName": "Judgement Green",
+        "canonical": "oklch(64.6% 0.166 148)",
+        "tonalRamp": [
+          "#001100",
+          "#002e0b",
+          "#094d1e",
+          "#157030",
+          "#11963e",
+          "#45b960",
+          "#6fe185",
+          "#c8ffcf"
+        ]
+      },
+      "ok-deep": {
+        "role": "secondary",
+        "displayName": "Deep Judgement Green",
+        "canonical": "oklch(53.1% 0.140 148)",
+        "tonalRamp": [
+          "#001100",
+          "#002e0b",
+          "#004e1a",
+          "#157030",
+          "#34934a",
+          "#59b66b",
+          "#80dd90",
+          "#c8ffcf"
+        ]
+      },
+      "ok-tint": {
+        "role": "secondary",
+        "displayName": "Green Tint",
+        "canonical": "oklch(93.6% 0.029 153)",
+        "tonalRamp": [
+          "#030f06",
+          "#19281d",
+          "#344439",
+          "#516356",
+          "#718375",
+          "#91a496",
+          "#b7cabb",
+          "#e1f5e6"
+        ]
+      },
+      "ng": {
+        "role": "secondary",
+        "displayName": "Anomaly Red",
+        "canonical": "oklch(56.7% 0.209 26)",
+        "tonalRamp": [
+          "#210000",
+          "#4c0004",
+          "#7c010c",
+          "#b10618",
+          "#de3132",
+          "#f96a61",
+          "#feaba3",
+          "#fee9e6"
+        ]
+      },
+      "ng-tint": {
+        "role": "secondary",
+        "displayName": "Red Tint",
+        "canonical": "oklch(92.3% 0.030 15)",
+        "tonalRamp": [
+          "#160607",
+          "#311e1f",
+          "#4e393b",
+          "#6e5758",
+          "#8e7677",
+          "#b09798",
+          "#d7bdbe",
+          "#fee9e9"
+        ]
+      },
+      "cyan": {
+        "role": "tertiary",
+        "displayName": "Inspection Cyan",
+        "canonical": "oklch(67.2% 0.153 240)",
+        "tonalRamp": [
+          "#000d1b",
+          "#00273e",
+          "#004468",
+          "#006494",
+          "#1386c1",
+          "#1ca9f2",
+          "#85cdff",
+          "#dff1ff"
+        ]
+      },
+      "cyan-deep": {
+        "role": "tertiary",
+        "displayName": "Deep Cyan",
+        "canonical": "oklch(49.3% 0.113 240)",
+        "tonalRamp": [
+          "#000d1c",
+          "#00273f",
+          "#074466",
+          "#106492",
+          "#3085b9",
+          "#55a7dd",
+          "#89cdfc",
+          "#e0f1fe"
+        ]
+      },
+      "idle": {
+        "role": "neutral",
+        "displayName": "Idle Slate",
+        "canonical": "oklch(48.7% 0.021 246)",
+        "tonalRamp": [
+          "#050c14",
+          "#1c252e",
+          "#37414a",
+          "#545f69",
+          "#737f89",
+          "#94a0ab",
+          "#b9c6d1",
+          "#e3f0fc"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "lamp": {
+        "displayName": "Lamp",
+        "purpose": "The judgement word only; 11rem kiosk, 8.5rem laptop, 5.5rem phone; steps down by word length instead of wrapping."
+      },
+      "wordmark": {
+        "displayName": "Wordmark",
+        "purpose": "Product name on the navy title bar."
+      },
+      "readout": {
+        "displayName": "Readout",
+        "purpose": "Live mismatch value beside its limit."
+      },
+      "key": {
+        "displayName": "Key",
+        "purpose": "HMI key labels."
+      },
+      "pane-name": {
+        "displayName": "Pane name",
+        "purpose": "EXPECTED / LIVE caption strips."
+      },
+      "field": {
+        "displayName": "Field",
+        "purpose": "Field names and window titles."
+      },
+      "column-head": {
+        "displayName": "Column head",
+        "purpose": "Table and counts headers."
+      },
+      "reason": {
+        "displayName": "Reason",
+        "purpose": "The sentence explaining the current state; max 60ch, reserved 4.05em height."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Table cells, frame strip, empty wells."
+      },
+      "note": {
+        "displayName": "Note",
+        "purpose": "Rule notes, history text, match note."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "state-change",
+        "value": "none (instant)",
+        "purpose": "Lamp, ROI box, panes, strip and judgement cells switch in the same frame."
+      },
+      {
+        "name": "key-press",
+        "value": "background-color 150ms ease-out, color 150ms ease-out",
+        "purpose": "HMI key hover and press; removed under prefers-reduced-motion."
+      },
+      {
+        "name": "key-flash",
+        "value": "160ms pressed state",
+        "purpose": "Visible press when a key is triggered from the keyboard."
+      },
+      {
+        "name": "hold-to-exit",
+        "value": "transform scaleX(0 to 1) 1000ms linear",
+        "purpose": "Kiosk exit key fill while held; cancels on release."
+      },
+      {
+        "name": "live-data",
+        "value": "per frame",
+        "purpose": "Only the match bar, trends and clock move, at the data rate."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "kiosk",
+        "value": "(min-width: 1600px) and (min-height: 900px)"
+      },
+      {
+        "name": "laptop",
+        "value": "(max-width: 1599px), (max-height: 899px)"
+      },
+      {
+        "name": "single-column",
+        "value": "(max-width: 1180px)"
+      },
+      {
+        "name": "phone",
+        "value": "(max-width: 700px)"
+      }
+    ],
+    "focus": {
+      "value": "outline: 3px solid #00a0e9; outline-offset: 2px",
+      "purpose": "All :focus-visible states."
+    }
+  },
+  "components": [
+    {
+      "name": "HMI Key",
+      "kind": "button",
+      "refersTo": "key",
+      "description": "Rectangular 64px key with a shortcut cap; inverts to navy when pressed.",
+      "html": "<button class=\"ds-key\">Learn normal<kbd>L</kbd></button>",
+      "css": ".ds-key{display:inline-flex;align-items:center;gap:12px;min-height:64px;padding:0 22px;border:2px solid #1d2a3a;border-radius:0;background:#fff;color:#1d2a3a;font:600 1.375rem/1 'Barlow Condensed','Arial Narrow',sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background-color 150ms ease-out,color 150ms ease-out}.ds-key kbd{font:500 .75rem/1 'Barlow','Segoe UI',sans-serif;padding:4px 6px;border:1px solid currentColor;opacity:.7}.ds-key:hover{background:#d9dee2}.ds-key:active{background:#1d2a3a;color:#fff}.ds-key:focus-visible{outline:3px solid #00a0e9;outline-offset:2px}"
+    },
+    {
+      "name": "Primary Key",
+      "kind": "button",
+      "refersTo": "key-primary",
+      "description": "The action the state calls for, e.g. RESTART after a trip.",
+      "html": "<button class=\"ds-key-primary\">Restart<kbd>R</kbd></button>",
+      "css": ".ds-key-primary{display:inline-flex;align-items:center;gap:12px;min-height:64px;padding:0 22px;border:2px solid #1d2a3a;border-radius:0;background:#1d2a3a;color:#fff;font:600 1.375rem/1 'Barlow Condensed','Arial Narrow',sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background-color 150ms ease-out}.ds-key-primary kbd{font:500 .75rem/1 'Barlow','Segoe UI',sans-serif;padding:4px 6px;border:1px solid currentColor;opacity:.7}.ds-key-primary:hover{background:#2c3e53}.ds-key-primary:focus-visible{outline:3px solid #00a0e9;outline-offset:2px}"
+    },
+    {
+      "name": "Disabled Key",
+      "kind": "button",
+      "refersTo": "key-disabled",
+      "description": "Unavailable action: dashed quiet border.",
+      "html": "<button class=\"ds-key-off\" disabled>Restart</button>",
+      "css": ".ds-key-off{min-height:64px;padding:0 22px;border:2px dashed #56626f;border-radius:0;background:transparent;color:#56626f;font:600 1.375rem/1 'Barlow Condensed','Arial Narrow',sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:not-allowed}"
+    },
+    {
+      "name": "Title Bar with Mode Switch",
+      "kind": "nav",
+      "refersTo": "title-bar",
+      "description": "Navy 64px bar: wordmark, RUN/SETUP segmented switch, clock, title-bar key.",
+      "html": "<header class=\"ds-bar\"><span class=\"ds-mark\">Vizion Motor</span><span class=\"ds-modes\"><span class=\"ds-mode on\">Run</span><span class=\"ds-mode\">Setup</span></span><time class=\"ds-clock\">15:41:54</time><button class=\"ds-kd\">Export CSV</button></header>",
+      "css": ".ds-bar{height:64px;display:flex;align-items:center;gap:28px;padding:0 24px;background:#1d2a3a;color:#fff}.ds-mark{font:700 1.625rem/1 'Barlow Condensed','Arial Narrow',sans-serif;letter-spacing:.12em;text-transform:uppercase}.ds-modes{display:flex;border:1px solid #6c7d8f}.ds-mode{font:600 .9375rem/1 'Barlow Condensed','Arial Narrow',sans-serif;letter-spacing:.1em;text-transform:uppercase;padding:8px 14px;color:#8fa1b3}.ds-mode+.ds-mode{border-left:1px solid #6c7d8f}.ds-mode.on{background:#fff;color:#1d2a3a}.ds-clock{margin-left:auto;font:600 1.625rem/1 'Barlow Condensed','Arial Narrow',sans-serif;font-variant-numeric:tabular-nums}.ds-kd{min-height:40px;padding:0 14px;border:1px solid #6c7d8f;border-radius:0;background:transparent;color:#fff;font:600 1.0625rem/1 'Barlow Condensed','Arial Narrow',sans-serif;letter-spacing:.06em;text-transform:uppercase;transition:background-color 150ms ease-out}.ds-kd:hover{background:#2c3e53}.ds-kd:active{background:#fff;color:#1d2a3a}.ds-kd:focus-visible{outline:3px solid #00a0e9;outline-offset:2px}"
+    },
+    {
+      "name": "Judgement Lamp",
+      "kind": "custom",
+      "refersTo": "lamp-anomaly",
+      "description": "Bezelled lamp; one condensed word; the face colour is the state. Changes instantly.",
+      "html": "<div class=\"ds-lamp\"><div class=\"ds-lamp-face ng\">Anomaly</div></div><div class=\"ds-lamp\"><div class=\"ds-lamp-face ok\">OK</div></div>",
+      "css": ".ds-lamp{border:2px solid #1d2a3a;padding:6px;background:#fff;margin-bottom:12px}.ds-lamp-face{min-height:120px;display:grid;place-items:center;color:#fff;font:700 5.5rem/.86 'Barlow Condensed','Arial Narrow',sans-serif;text-transform:uppercase;letter-spacing:.01em;background:#56616b}.ds-lamp-face.ok{background:#1d8139}.ds-lamp-face.ng{background:#d6262b}"
+    },
+    {
+      "name": "Image Pane with ROI and Tool Tag",
+      "kind": "card",
+      "refersTo": "pane-caption",
+      "description": "Navy caption over a 4:3 white well; ROI box cyan at rest, green when OK, red on a trip.",
+      "html": "<figure class=\"ds-pane\"><figcaption><span>Live</span><small>camera now · 8.6 fps</small></figcaption><div class=\"ds-well\"><div class=\"ds-roi ok\"><span>01 Arm match 0.00 / 0.15 OK</span></div></div></figure>",
+      "css": ".ds-pane{margin:0;width:320px;border:1px solid #1d2a3a;background:#fff}.ds-pane figcaption{display:flex;justify-content:space-between;align-items:baseline;padding:9px 12px 8px;background:#1d2a3a;color:#fff;font:700 1.25rem/1 'Barlow Condensed','Arial Narrow',sans-serif;letter-spacing:.12em;text-transform:uppercase}.ds-pane small{font:500 .9375rem/1.1 'Barlow','Segoe UI',sans-serif;letter-spacing:0;text-transform:none;color:#c3cdd7}.ds-well{position:relative;aspect-ratio:4/3;background:#cfcac4}.ds-roi{position:absolute;left:25%;top:30%;width:50%;height:45%;border:2px solid #00a0e9;outline:1px solid rgb(255 255 255/.85)}.ds-roi.ok{border-color:#2fa84f}.ds-roi span{position:absolute;left:-2px;bottom:100%;margin-bottom:2px;padding:3px 7px 2px;white-space:nowrap;background:#00a0e9;color:#fff;font:600 .875rem/1.1 'Barlow Condensed','Arial Narrow',sans-serif;letter-spacing:.06em;text-transform:uppercase}.ds-roi.ok span{background:#1d8139}"
+    },
+    {
+      "name": "Frame Strip / HELD FRAME",
+      "kind": "custom",
+      "description": "One-line reserved slot under the panes; turns red and reads HELD FRAME after a trip.",
+      "html": "<p class=\"ds-strip\"><b>Frame 473</b><span>compared with the master image taken at +37°</span></p><p class=\"ds-strip held\"><b>Held frame</b><span>15:41:48 · tool 01 tripped at mismatch 0.93, limit 0.15.</span></p>",
+      "css": ".ds-strip{display:flex;gap:12px;align-items:baseline;margin:0 0 8px;padding:10px 14px;border:2px solid #b6bfc7;background:#fff;color:#3b4a5b;font:500 1.0625rem/1.3 'Barlow','Segoe UI',sans-serif;font-variant-numeric:tabular-nums}.ds-strip b{font:700 1.125rem/1 'Barlow Condensed','Arial Narrow',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#1d2a3a}.ds-strip.held{border-color:#d6262b;color:#1d2a3a}.ds-strip.held b{color:#d6262b}"
+    },
+    {
+      "name": "Match Bar",
+      "kind": "custom",
+      "refersTo": "match-fill",
+      "description": "Live mismatch meter: navy below the limit, red past it; limit tick at the midpoint.",
+      "html": "<div class=\"ds-match\"><div class=\"ds-mh\"><span>Mismatch</span><b>0.001</b></div><div class=\"ds-track\"><i style=\"width:1%\"></i><em></em></div></div><div class=\"ds-match\"><div class=\"ds-mh\"><span>Mismatch</span><b>0.928</b></div><div class=\"ds-track\"><i class=\"over\" style=\"width:100%\"></i><em></em></div></div>",
+      "css": ".ds-match{border:1px solid #1d2a3a;background:#fff;padding:10px 16px;margin-bottom:8px}.ds-mh{display:flex;justify-content:space-between;align-items:baseline}.ds-mh span{font:600 .9375rem/1.2 'Barlow Condensed','Arial Narrow',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#3b4a5b}.ds-mh b{font:600 2.5rem/1 'Barlow Condensed','Arial Narrow',sans-serif;font-variant-numeric:tabular-nums;color:#1d2a3a}.ds-track{position:relative;height:28px;margin:14px 0 6px;border:1px solid #1d2a3a;background:#e7e9ea}.ds-track i{position:absolute;inset:0 auto 0 0;background:#1d2a3a}.ds-track i.over{background:#d6262b}.ds-track em{position:absolute;top:-7px;bottom:-7px;left:50%;width:2px;margin-left:-1px;background:#1d2a3a}"
+    },
+    {
+      "name": "Judgement Cells",
+      "kind": "chip",
+      "refersTo": "judge-ok",
+      "description": "Fixed-width judgement chips for the results table and history.",
+      "html": "<span class=\"ds-j ok\">OK</span> <span class=\"ds-j ng\">Anomaly</span> <span class=\"ds-j info\">Info</span>",
+      "css": ".ds-j{display:inline-block;min-width:5.6em;padding:4px 8px 3px;text-align:center;font:700 .9375rem/1 'Barlow Condensed','Arial Narrow',sans-serif;letter-spacing:.08em;text-transform:uppercase;border:1px solid #b6bfc7;color:#56626f}.ds-j.ok{border-color:#2fa84f;background:#dcf0e1;color:#1d8139}.ds-j.ng{border-color:#d6262b;background:#d6262b;color:#fff}.ds-j.info{background:#e7e9ea;color:#3b4a5b}"
+    },
+    {
+      "name": "Counts Row",
+      "kind": "custom",
+      "description": "Counts as one ruled table row, never KPI tiles.",
+      "html": "<table class=\"ds-counts\"><tr><th>Inspected</th><th>Over limit</th><th>Anomalies</th><th>Sweeps</th></tr><tr><td>204</td><td>3</td><td>1</td><td>8</td></tr></table>",
+      "css": ".ds-counts{width:100%;border-collapse:collapse;border:1px solid #b6bfc7;table-layout:fixed;background:#fff}.ds-counts th{text-align:left;padding:6px 10px 2px;font:600 .8125rem/1.1 'Barlow Condensed','Arial Narrow',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#3b4a5b}.ds-counts td{padding:2px 10px 7px;font:600 1.0625rem/1.2 'Barlow','Segoe UI',sans-serif;font-variant-numeric:tabular-nums;color:#1d2a3a}.ds-counts th+th,.ds-counts td+td{border-left:1px solid #b6bfc7}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Vision Inspection Station",
+    "overview": "Vizion Motor reads like the operator panel of an industrial machine-vision sensor: a light grey panel, navy title bars, white image wells, and one judgement lamp. Every camera frame is an inspection of the servo arm against its master image, and the screen is arranged so the verdict, the evidence that decided it, and the score sit side by side. It is legible from across a desk: the lamp word is set as large as ANOMALY fits its column, the keys are 64px rectangles, and every number uses tabular figures.\n\nThe panel is flat and square. Depth comes only from navy keylines and the change from panel grey to white wells; there are no shadows, no radius, no blur. Colour is rationed: navy carries structure and ink, cyan marks what the inspection tool is looking at, and green and red appear only where a judgement is being shown. That rationing is what lets a trip read instantly: when the arm is grabbed, the lamp, the region box, both pane frames and the HELD FRAME stamp go red in the same frame, and nothing else on the screen is red to compete.\n\nIt behaves like hardware. State changes are instant; only live data (the match bar, the trends, the clock) moves. The kiosk view fits one 1920×1080 screen without scrolling.",
+    "keyCharacteristics": [
+      "Light panel grey ground, navy title bars and ink, white image wells with 1px navy keylines.",
+      "Square corners everywhere (0px); flat, no shadows.",
+      "Green and red reserved for judgements; cyan for inspection overlays, selection and focus.",
+      "Barlow Condensed for the lamp, keys, field names and readouts; Barlow for sentences; tabular figures throughout.",
+      "Rectangular HMI keys that invert to navy when pressed.",
+      "Instant state changes; only live data moves."
+    ],
+    "rules": [
+      {
+        "name": "The Judgement-Only Rule",
+        "body": "Green and red appear only where a judgement is shown: the lamp, the region box and its tool tag, judgement cells and history chips, the match bar past its limit, and the anomaly evidence (held pane frames, HELD FRAME stamp, trend trip marks). Never as decoration, branding, or a generic success/error colour for UI chrome.",
+        "section": "colors"
+      },
+      {
+        "name": "The Navy-Below-Limit Rule",
+        "body": "A measurement is navy until it crosses its limit. The match bar fills navy and turns red only past the limit; it is never green, because a value is not a judgement.",
+        "section": "colors"
+      },
+      {
+        "name": "The Cyan-Looks Rule",
+        "body": "Cyan means \"the tool is looking here\": overlays, selection, focus, and what the camera saw. It never carries a verdict.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two-Voice Rule",
+        "body": "Condensed uppercase is the machine labelling and judging; regular sentence case is the machine explaining to a person. Sentences are never set in condensed caps, and labels are never set in sentence case.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Rule",
+        "body": "Every figure is tabular. Numbers that update at the frame rate must not shift their neighbours.",
+        "section": "typography"
+      },
+      {
+        "name": "The Reserved Slot Rule",
+        "body": "Anything that changes on a trip occupies a slot that already exists. The frame strip is always one line under the panes and becomes HELD FRAME in place; the reason keeps a reserved 4.05em height; the lamp word steps down a size instead of wrapping. Nothing moves when the station trips.",
+        "section": "layout"
+      },
+      {
+        "name": "The Keyline Rule",
+        "body": "Separation is drawn with a line, never cast with a shadow: 1px navy for wells and windows, 1px rule-grey inside tables, 2px navy for keys and the lamp bezel, 3px red for held panes.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** keep every corner square (0px) and every surface flat; separate with navy keylines.",
+      "**Do** reserve green and red for judgements and anomaly evidence, and keep measurements navy until they cross their limit.",
+      "**Do** use cyan only for what the inspection is looking at: ROI boxes at rest, the tool tag, the camera's trace, selection and focus.",
+      "**Do** switch state instantly; let only live data (bar, trends, clock) move. The only timed transitions are the 150ms key background/colour change and the 1000ms hold-to-exit fill.",
+      "**Do** reserve a slot for anything that changes on a trip, so the layout never shifts.",
+      "**Do** set labels in Barlow Condensed uppercase and sentences in Barlow sentence case, with tabular figures everywhere.",
+      "**Do** use dashed borders for not-yet or unavailable states and hatching for absence."
+    ],
+    "donts": [
+      "**Don't** use KPI tiles or big-number cards for counts; counts are a ruled table row.",
+      "**Don't** add shadows, rounded corners, tonal gradients, or blur; the 45° hatching for absence is the only patterned fill.",
+      "**Don't** colour the match bar green; below the limit it is navy.",
+      "**Don't** let the lamp word wrap; step its size down instead.",
+      "**Don't** show a stale limit while the system is re-learning.",
+      "**Don't** animate state changes (no fades, slides or pulses on the lamp, box or panes)."
+    ]
+  }
+}

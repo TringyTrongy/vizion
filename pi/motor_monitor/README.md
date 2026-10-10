@@ -134,7 +134,7 @@ Keys:
 | `motor_dashboard.py` | The web server (Python standard library) on port 8767, the camera and motion threads, the CSV log and the evidence pictures |
 | `web/` | The page: `index.html`, `motor.css`, `motor.js`, and the self-hosted Barlow fonts (SIL Open Font License, `web/fonts/OFL.txt`) |
 | `test_motor_monitor.py` | 20 tests on the simulated rig with a made-up clock: no camera or GPIO needed. Run `python motor_monitor/test_motor_monitor.py` |
-| `PRODUCT.md`, `.impeccable/surfaces/` | Who it is for and the design brief (Vision Inspection Station direction), for the Impeccable design workflow |
+| `PRODUCT.md`, `DESIGN.md`, `.impeccable/` | Who it is for, the design system (colours, type, components, layout, the rules behind them) and the design brief (Vision Inspection Station), for the Impeccable design workflow |
 
 ## Limits
 

@@ -32,100 +32,103 @@
   </header>
 
   <main class="station">
-    <section class="images" aria-label="Expected and live pictures of the arm">
-      <figure class="pane" id="pane-expected">
-        <figcaption><span class="pane-name">Expected</span><span class="pane-note" id="expected-note">master image</span></figcaption>
-        <div class="well">
-          <div class="roi" id="roi-expected" hidden></div>
-          <p class="well-empty" id="expected-empty">No master images yet. Learn normal records them.</p>
-        </div>
-      </figure>
-      <figure class="pane" id="pane-live">
-        <figcaption><span class="pane-name">Live</span><span class="pane-note" id="live-note">camera</span></figcaption>
-        <div class="well">
-          <div class="roi" id="roi-live" hidden><span class="tool-tag" id="tool-tag">01 Arm match</span></div>
-          <p class="well-empty" id="live-empty">Waiting for the camera…</p>
-        </div>
-      </figure>
-      <p class="held" id="held" hidden></p>
-    </section>
+    <div class="col col-main">
+      <section class="images" aria-label="Expected and live pictures of the arm">
+        <figure class="pane" id="pane-expected">
+          <figcaption><span class="pane-name">Expected</span><span class="pane-note" id="expected-note">master image</span></figcaption>
+          <div class="well">
+            <div class="roi" id="roi-expected" hidden></div>
+            <p class="well-empty" id="expected-empty">No master images yet. Learn normal records them.</p>
+          </div>
+        </figure>
+        <figure class="pane" id="pane-live">
+          <figcaption><span class="pane-name">Live</span><span class="pane-note" id="live-note">camera</span></figcaption>
+          <div class="well">
+            <div class="roi" id="roi-live" hidden><span class="tool-tag" id="tool-tag">01 Arm match</span></div>
+            <p class="well-empty" id="live-empty">Waiting for the camera…</p>
+          </div>
+        </figure>
+        <p class="strip" id="strip" aria-live="polite"><b id="strip-label">Frame</b><span id="strip-text">Waiting for the camera…</span></p>
+      </section>
 
-    <section class="judgement" aria-label="Judgement">
-      <div class="lamp" id="lamp" data-state="NOT LEARNED">
-        <div class="lamp-face">
-          <span class="lamp-word" id="lamp-word">Not learned</span>
-          <div class="learn" id="learn" hidden>
-            <div class="learn-bar" id="learn-bar" aria-hidden="true"></div>
-            <span class="learn-text" id="learn-text"></span>
+      <section class="band" aria-label="Results">
+        <div class="tools">
+          <table class="results">
+            <caption>Inspection tools</caption>
+            <thead><tr><th scope="col">No.</th><th scope="col">Tool</th><th scope="col">Measured</th><th scope="col">Against</th><th scope="col">Judgement</th></tr></thead>
+            <tbody>
+              <tr id="tool-1"><td>01</td><td>Arm match</td><td class="num" data-k="m">–</td><td class="num" data-k="a">–</td><td><span class="judge" data-k="j">–</span></td></tr>
+              <tr id="tool-2"><td>02</td><td>Arm position</td><td class="num" data-k="m">–</td><td class="num" data-k="a">–</td><td><span class="judge" data-k="j">–</span></td></tr>
+              <tr id="tool-3"><td>03</td><td>Camera</td><td class="num" data-k="m">–</td><td class="num" data-k="a">at least 3 fps</td><td><span class="judge" data-k="j">–</span></td></tr>
+            </tbody>
+          </table>
+          <p class="rule-note">Tool 01 stops the motor after <span id="confirm-n">3</span> frames in a row over the limit; tool 02 only explains.</p>
+          <table class="counts">
+            <caption class="sr-only">Counts since the dashboard started</caption>
+            <thead><tr><th scope="col">Inspected</th><th scope="col">Over limit</th><th scope="col">Anomalies</th><th scope="col">Sweeps</th></tr></thead>
+            <tbody><tr><td id="c-inspected">–</td><td id="c-over">–</td><td id="c-anomalies">–</td><td id="c-sweeps">–</td></tr></tbody>
+          </table>
+          <p class="learned" id="learned-line"></p>
+          <p class="rig-notes" id="rig-notes"></p>
+        </div>
+
+        <div class="trends">
+          <figure class="trend">
+            <figcaption><span class="field">Mismatch, last 60 s</span><span class="axis-note">log scale</span></figcaption>
+            <svg id="trend-mismatch" viewBox="0 0 600 200" preserveAspectRatio="none" role="img" aria-label="Mismatch over the last 60 seconds against its limit"></svg>
+          </figure>
+          <figure class="trend">
+            <figcaption><span class="field">Arm angle, last 60 s</span><span class="legend"><i class="lg-told"></i>Told <i class="lg-seen"></i>Seen by the camera</span></figcaption>
+            <svg id="trend-angle" viewBox="0 0 600 160" preserveAspectRatio="none" role="img" aria-label="Commanded and seen arm angle over the last 60 seconds"></svg>
+          </figure>
+        </div>
+      </section>
+    </div>
+
+    <div class="col col-side">
+      <section class="judgement" aria-label="Judgement">
+        <div class="lamp" id="lamp" data-state="NOT LEARNED">
+          <div class="lamp-face">
+            <span class="lamp-word" id="lamp-word">Not learned</span>
+            <div class="learn" id="learn" hidden>
+              <div class="learn-bar" id="learn-bar" aria-hidden="true"></div>
+              <span class="learn-text" id="learn-text"></span>
+            </div>
           </div>
         </div>
-      </div>
-      <p class="reason" id="reason" aria-live="polite">Connecting to Vizion Motor…</p>
-      <div class="match" id="match">
-        <div class="match-head">
-          <span class="field">Mismatch</span>
-          <span class="match-value"><b id="match-value">–</b><span class="match-limit" id="match-limit"></span></span>
+        <p class="reason" id="reason" aria-live="polite">Connecting to Vizion Motor…</p>
+        <div class="match" id="match">
+          <div class="match-head">
+            <span class="field">Mismatch</span>
+            <span class="match-value"><b id="match-value">–</b><span class="match-limit" id="match-limit"></span></span>
+          </div>
+          <div class="match-track" id="match-track">
+            <div class="match-fill" id="match-fill"></div>
+            <div class="match-tick" id="match-tick"><span>Limit</span></div>
+          </div>
+          <p class="match-note" id="match-note">Compared with the master images at the same commanded position.</p>
         </div>
-        <div class="match-track" id="match-track">
-          <div class="match-fill" id="match-fill"></div>
-          <div class="match-tick" id="match-tick"><span>Limit</span></div>
+        <div class="keys" role="group" aria-label="Controls">
+          <button class="key" id="learn-key" data-action="learn">Learn normal<kbd>L</kbd></button>
+          <button class="key" id="run-key" data-action="start">Start<kbd>Space</kbd></button>
+          <button class="key" id="restart-key" data-action="restart">Restart<kbd>R</kbd></button>
         </div>
-        <p class="match-note" id="match-note">Compared with the master images at the same commanded position.</p>
-      </div>
-      <div class="keys" role="group" aria-label="Controls">
-        <button class="key" id="learn-key" data-action="learn">Learn normal<kbd>L</kbd></button>
-        <button class="key" id="run-key" data-action="start">Start<kbd>Space</kbd></button>
-        <button class="key" id="restart-key" data-action="restart">Restart<kbd>R</kbd></button>
-      </div>
-      <p class="key-error" id="key-error" role="alert" hidden></p>
-      <div class="sim" id="sim" hidden>
-        <span class="field">Simulator</span>
-        <button class="key key-small" data-sim="hold">Hand on arm</button>
-        <button class="key key-small" data-sim="freeze">Arm stuck</button>
-        <button class="key key-small" data-sim="nudge">Push arm</button>
-        <button class="key key-small" data-sim="cover">Cover camera</button>
-        <button class="key key-small" data-sim="release">Clear</button>
-      </div>
-    </section>
+        <p class="key-error" id="key-error" role="alert" hidden></p>
+        <div class="sim" id="sim" hidden>
+          <span class="field">Simulator</span>
+          <button class="key key-small" data-sim="hold">Hand on arm</button>
+          <button class="key key-small" data-sim="freeze">Arm stuck</button>
+          <button class="key key-small" data-sim="nudge">Push arm</button>
+          <button class="key key-small" data-sim="cover">Cover lens</button>
+          <button class="key key-small" data-sim="release">Clear</button>
+        </div>
+      </section>
 
-    <section class="band" aria-label="Results">
-      <div class="tools">
-        <table class="results">
-          <caption>Inspection tools</caption>
-          <thead><tr><th scope="col">No.</th><th scope="col">Tool</th><th scope="col">Measured</th><th scope="col">Against</th><th scope="col">Judgement</th></tr></thead>
-          <tbody>
-            <tr id="tool-1"><td>01</td><td>Arm match</td><td class="num" data-k="m">–</td><td class="num" data-k="a">–</td><td><span class="judge" data-k="j">–</span></td></tr>
-            <tr id="tool-2"><td>02</td><td>Arm position</td><td class="num" data-k="m">–</td><td class="num" data-k="a">–</td><td><span class="judge" data-k="j">–</span></td></tr>
-            <tr id="tool-3"><td>03</td><td>Camera</td><td class="num" data-k="m">–</td><td class="num" data-k="a">at least 3 fps</td><td><span class="judge" data-k="j">–</span></td></tr>
-          </tbody>
-        </table>
-        <p class="rule-note">Tool 01 stops the motor after <span id="confirm-n">3</span> frames in a row over the limit; tool 02 only explains the reason.</p>
-        <dl class="counters">
-          <div><dt>Inspected</dt><dd id="c-inspected">–</dd></div>
-          <div><dt>Over limit</dt><dd id="c-over">–</dd></div>
-          <div><dt>Anomalies</dt><dd id="c-anomalies">–</dd></div>
-          <div><dt>Sweeps</dt><dd id="c-sweeps">–</dd></div>
-        </dl>
-        <p class="learned" id="learned-line"></p>
-        <p class="rig-notes" id="rig-notes"></p>
-      </div>
-
-      <div class="trends">
-        <figure class="trend">
-          <figcaption><span class="field">Mismatch, last 60 s</span><span class="axis-note">log scale</span></figcaption>
-          <svg id="trend-mismatch" viewBox="0 0 600 200" preserveAspectRatio="none" role="img" aria-label="Mismatch over the last 60 seconds against its limit"></svg>
-        </figure>
-        <figure class="trend">
-          <figcaption><span class="field">Arm angle, last 60 s</span><span class="legend"><i class="lg-told"></i>Told <i class="lg-seen"></i>Seen by the camera</span></figcaption>
-          <svg id="trend-angle" viewBox="0 0 600 160" preserveAspectRatio="none" role="img" aria-label="Commanded and seen arm angle over the last 60 seconds"></svg>
-        </figure>
-      </div>
-
-      <div class="history">
-        <h2 class="field">Inspection history</h2>
+      <section class="history" aria-labelledby="history-title">
+        <h2 class="field" id="history-title">Inspection history</h2>
         <ol class="events" id="events"></ol>
-      </div>
-    </section>
+      </section>
+    </div>
   </main>
 
   <div class="offline" id="offline" hidden>
