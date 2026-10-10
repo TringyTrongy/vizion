@@ -1,0 +1,32 @@
+{
+  "machine_temperature_system_failure.csv": {
+    "url": "https://raw.githubusercontent.com/numenta/NAB/master/data/realKnownCause/machine_temperature_system_failure.csv",
+    "downloaded": "2026-10-09T07:17:17+00:00",
+    "bytes": 732223,
+    "sha256": "92bf5b87fc7f9bba8ca0b7ec63ccaac8cb4a1371a258e8c29a10ae9c018d82a4"
+  },
+  "ambient_temperature_system_failure.csv": {
+    "url": "https://raw.githubusercontent.com/numenta/NAB/master/data/realKnownCause/ambient_temperature_system_failure.csv",
+    "downloaded": "2026-10-09T07:17:18+00:00",
+    "bytes": 233321,
+    "sha256": "230b68ccca20f59d562afd5d24ad52939c9b784386bed0054018358bf9120581"
+  },
+  "combined_windows.json": {
+    "url": "https://raw.githubusercontent.com/numenta/NAB/master/labels/combined_windows.json",
+    "downloaded": "2026-10-09T07:17:18+00:00",
+    "bytes": 15359,
+    "sha256": "1e1fbc4601321aad8d0f8b3784c8134299379f68f6c1f7777565f8ffd57ab6b1"
+  },
+  "combined_labels.json": {
+    "url": "https://raw.githubusercontent.com/numenta/NAB/master/labels/combined_labels.json",
+    "downloaded": "2026-10-09T07:17:18+00:00",
+    "bytes": 7015,
+    "sha256": "98724014c162fcfd4be605683517f194051a54e98756c53667bd33ddbc644d9b"
+  },
+  "NAB_LICENSE.txt": {
+    "url": "https://raw.githubusercontent.com/numenta/NAB/master/LICENSE.txt",
+    "downloaded": "2026-10-09T07:17:19+00:00",
+    "bytes": 1056,
+    "sha256": "0a0b4d0b10cb1f7ed9ab2993ef93defc03447e6eba9daca1315dd32dae4877e3"
+  }
+}

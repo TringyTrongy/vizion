@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Vizion Sense
+Comment=Temperature and humidity dashboard with anomaly alerts
+Exec=/home/vizion/vizion/run_sensors.sh
+Icon=utilities-system-monitor
+Terminal=false
+Categories=Utility;

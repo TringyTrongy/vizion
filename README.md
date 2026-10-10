@@ -7,6 +7,7 @@ Resistor and capacitor detection on a Raspberry Pi 5 with a USB webcam. A YOLO26
 | Path | Contents |
 |---|---|
 | [`pi/`](pi) | Everything that runs on the Pi: dashboard, camera preview, detector, tracker, LED driver, launchers, tests. Setup, controls and LED wiring are in [pi/README.md](pi/README.md) |
+| [`pi/sensor_monitor/`](pi/sensor_monitor) | **Vizion Sense**: a separate DHT11 temperature and humidity monitor with explainable anomaly alerts, a humidity-switched "fan" on the servo with safety shutdowns, a dashboard, CSV export, and tests against the public NAB datasets. Step-by-step guide in [its README](pi/sensor_monitor/README.md) |
 | [`pi/motor_monitor/`](pi/motor_monitor) | **Vizion Motor**: watches the SG90 servo arm with the webcam, compares every frame with pictures of normal movement it learned, and stops the motor when they don't match (an anomaly). Guide in [its README](pi/motor_monitor/README.md) |
 | [`model/`](model) | The detector: NCNN model, PyTorch weights, training record and the [model card](model/README.md) (results, colour balance, training data, limitations) |
 | [`data/`](data) | The training dataset in YOLO format (2197 images) and the labelled webcam frames. Sources and licences are in [data/README.md](data/README.md) |
@@ -19,6 +20,7 @@ Resistor and capacitor detection on a Raspberry Pi 5 with a USB webcam. A YOLO26
 ```sh
 cd ~/vizion
 ./run_dashboard.sh     # the camera: resistors and capacitors
+./run_sensors.sh       # Vizion Sense: temperature and humidity
 ./run_motor.sh         # Vizion Motor: the servo arm
 ```
 

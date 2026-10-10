@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vizion Sense</title>
+<meta name="description" content="DHT11 humidity and temperature monitor with explainable anomaly alerts, driving a fan with safety shutdowns">
+<link rel="preload" href="/static/fonts/space-grotesk-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/static/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/static/sensor.css">
+</head>
+<body>
+<div class="loader" id="loader" aria-hidden="true"><span class="loader-text">VIZION SENSE</span></div>
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<header class="nav">
+  <a class="logo" href="/" aria-label="Vizion Sense">VZ<span>.</span></a>
+  <nav class="streams" id="streams" aria-label="Data source"></nav>
+  <div class="nav-right">
+    <time class="clock" id="clock">--:--:--</time>
+    <button class="btn btn-primary" id="export-btn" aria-haspopup="true" aria-expanded="false">Export CSV</button>
+    <button class="btn btn-ghost exit" id="exit-btn" hidden><span>Hold to exit</span><i></i></button>
+  </div>
+  <div class="export-pop" id="export-pop" hidden>
+    <p class="label" id="export-title">Export readings</p>
+    <div class="pills">
+      <button class="pill" data-range="hour">Last hour</button>
+      <button class="pill" data-range="day">Today</button>
+      <button class="pill" data-range="session" title="Since the dashboard started or the readings were last reset">This session</button>
+      <button class="pill" data-range="all">Everything</button>
+    </div>
+    <p class="hint" id="export-hint"></p>
+  </div>
+</header>
+
+<main class="board" id="board">
+  <section class="hero">
+    <div class="status-line">
+      <svg class="hex" id="hex" viewBox="0 0 100 100" aria-hidden="true">
+        <polygon class="hex-ring" points="50,3 93,27 93,73 50,97 7,73 7,27"/>
+        <polygon class="hex-core" points="50,24 73,37 73,63 50,76 27,63 27,37"/>
+      </svg>
+      <h1 class="status" id="status" aria-live="polite">Starting</h1>
+    </div>
+    <p class="sentence" id="sentence">Waiting for the first reading…</p>
+    <div class="controls" id="controls"></div>
+  </section>
+
+  <aside class="side-top">
+    <div class="badge" id="badge"><span class="dot"></span><span id="badge-text">Connecting</span></div>
+    <dl class="stats" id="stats"></dl>
+  </aside>
+
+  <section class="card metric" id="metric-0"></section>
+  <section class="card metric" id="metric-1"></section>
+
+  <section class="card chart-card">
+    <header class="card-head">
+      <p class="label" id="chart-title">Last 10 minutes</p>
+      <ul class="legend" id="legend"></ul>
+    </header>
+    <div class="charts" id="charts"></div>
+  </section>
+
+  <aside class="side">
+    <section class="card alerts-card">
+      <header class="card-head">
+        <p class="label" id="alerts-title">Alerts</p>
+        <p class="label quiet" id="alerts-count"></p>
+      </header>
+      <ol class="timeline" id="alerts"></ol>
+    </section>
+    <section class="card recent-card" id="side-b"></section>
+  </aside>
+</main>
+
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="/static/sensor.js"></script>
+</body>
+</html>

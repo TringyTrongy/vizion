@@ -14,4 +14,8 @@ data/vizion/.webcam_added
 pi/empty_table.png
 pi/captures/
 *.log
+pi/sensor_monitor/data/log/
+pi/sensor_monitor/data/exports/
+*.part
 pi/motor_monitor/data/
+pi/sensor_monitor/data/fan_settings.json

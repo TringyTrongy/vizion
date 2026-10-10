@@ -13,3 +13,5 @@
 *.woff binary
 *.param binary
 *.woff2 binary
+# Public datasets are checked against SHA-256 sums in their manifest: keep their bytes exactly
+pi/sensor_monitor/data/public/** -text
