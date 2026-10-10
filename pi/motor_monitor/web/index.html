@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vizion Motor</title>
+  <link rel="stylesheet" href="/static/motor.css">
+</head>
+<body>
+  <header class="titlebar">
+    <div class="brand">
+      <span class="wordmark">Vizion Motor</span>
+      <span class="subject">SG90 arm inspection</span>
+    </div>
+    <div class="modes" role="group" aria-label="Mode">
+      <span class="mode" data-mode="RUN">Run</span>
+      <span class="mode" data-mode="SETUP">Setup</span>
+    </div>
+    <span class="rig-tag" id="rig-tag" hidden>Simulated rig</span>
+    <div class="titlebar-end">
+      <time class="clock" id="clock">--:--:--</time>
+      <div class="export">
+        <button class="key key-dark" id="export-key" aria-haspopup="true" aria-expanded="false">Export CSV<kbd>E</kbd></button>
+        <div class="export-menu" id="export-menu" hidden>
+          <a href="/api/export?range=session" download>This session</a>
+          <a href="/api/export?range=today" download>Today</a>
+          <a href="/api/export?range=all" download>Everything</a>
+        </div>
+      </div>
+      <button class="key key-dark exit" id="exit-key" hidden><span class="exit-fill"></span><span class="exit-label">Hold to exit</span></button>
+    </div>
+  </header>
+
+  <main class="station">
+    <section class="images" aria-label="Expected and live pictures of the arm">
+      <figure class="pane" id="pane-expected">
+        <figcaption><span class="pane-name">Expected</span><span class="pane-note" id="expected-note">master image</span></figcaption>
+        <div class="well">
+          <div class="roi" id="roi-expected" hidden></div>
+          <p class="well-empty" id="expected-empty">No master images yet. Learn normal records them.</p>
+        </div>
+      </figure>
+      <figure class="pane" id="pane-live">
+        <figcaption><span class="pane-name">Live</span><span class="pane-note" id="live-note">camera</span></figcaption>
+        <div class="well">
+          <div class="roi" id="roi-live" hidden><span class="tool-tag" id="tool-tag">01 Arm match</span></div>
+          <p class="well-empty" id="live-empty">Waiting for the camera…</p>
+        </div>
+      </figure>
+      <p class="held" id="held" hidden></p>
+    </section>
+
+    <section class="judgement" aria-label="Judgement">
+      <div class="lamp" id="lamp" data-state="NOT LEARNED">
+        <div class="lamp-face">
+          <span class="lamp-word" id="lamp-word">Not learned</span>
+          <div class="learn" id="learn" hidden>
+            <div class="learn-bar" id="learn-bar" aria-hidden="true"></div>
+            <span class="learn-text" id="learn-text"></span>
+          </div>
+        </div>
+      </div>
+      <p class="reason" id="reason" aria-live="polite">Connecting to Vizion Motor…</p>
+      <div class="match" id="match">
+        <div class="match-head">
+          <span class="field">Mismatch</span>
+          <span class="match-value"><b id="match-value">–</b><span class="match-limit" id="match-limit"></span></span>
+        </div>
+        <div class="match-track" id="match-track">
+          <div class="match-fill" id="match-fill"></div>
+          <div class="match-tick" id="match-tick"><span>Limit</span></div>
+        </div>
+        <p class="match-note" id="match-note">Compared with the master images at the same commanded position.</p>
+      </div>
+      <div class="keys" role="group" aria-label="Controls">
+        <button class="key" id="learn-key" data-action="learn">Learn normal<kbd>L</kbd></button>
+        <button class="key" id="run-key" data-action="start">Start<kbd>Space</kbd></button>
+        <button class="key" id="restart-key" data-action="restart">Restart<kbd>R</kbd></button>
+      </div>
+      <p class="key-error" id="key-error" role="alert" hidden></p>
+      <div class="sim" id="sim" hidden>
+        <span class="field">Simulator</span>
+        <button class="key key-small" data-sim="hold">Hand on arm</button>
+        <button class="key key-small" data-sim="freeze">Arm stuck</button>
+        <button class="key key-small" data-sim="nudge">Push arm</button>
+        <button class="key key-small" data-sim="cover">Cover camera</button>
+        <button class="key key-small" data-sim="release">Clear</button>
+      </div>
+    </section>
+
+    <section class="band" aria-label="Results">
+      <div class="tools">
+        <table class="results">
+          <caption>Inspection tools</caption>
+          <thead><tr><th scope="col">No.</th><th scope="col">Tool</th><th scope="col">Measured</th><th scope="col">Against</th><th scope="col">Judgement</th></tr></thead>
+          <tbody>
+            <tr id="tool-1"><td>01</td><td>Arm match</td><td class="num" data-k="m">–</td><td class="num" data-k="a">–</td><td><span class="judge" data-k="j">–</span></td></tr>
+            <tr id="tool-2"><td>02</td><td>Arm position</td><td class="num" data-k="m">–</td><td class="num" data-k="a">–</td><td><span class="judge" data-k="j">–</span></td></tr>
+            <tr id="tool-3"><td>03</td><td>Camera</td><td class="num" data-k="m">–</td><td class="num" data-k="a">at least 3 fps</td><td><span class="judge" data-k="j">–</span></td></tr>
+          </tbody>
+        </table>
+        <p class="rule-note">Tool 01 stops the motor after <span id="confirm-n">3</span> frames in a row over the limit; tool 02 only explains the reason.</p>
+        <dl class="counters">
+          <div><dt>Inspected</dt><dd id="c-inspected">–</dd></div>
+          <div><dt>Over limit</dt><dd id="c-over">–</dd></div>
+          <div><dt>Anomalies</dt><dd id="c-anomalies">–</dd></div>
+          <div><dt>Sweeps</dt><dd id="c-sweeps">–</dd></div>
+        </dl>
+        <p class="learned" id="learned-line"></p>
+        <p class="rig-notes" id="rig-notes"></p>
+      </div>
+
+      <div class="trends">
+        <figure class="trend">
+          <figcaption><span class="field">Mismatch, last 60 s</span><span class="axis-note">log scale</span></figcaption>
+          <svg id="trend-mismatch" viewBox="0 0 600 200" preserveAspectRatio="none" role="img" aria-label="Mismatch over the last 60 seconds against its limit"></svg>
+        </figure>
+        <figure class="trend">
+          <figcaption><span class="field">Arm angle, last 60 s</span><span class="legend"><i class="lg-told"></i>Told <i class="lg-seen"></i>Seen by the camera</span></figcaption>
+          <svg id="trend-angle" viewBox="0 0 600 160" preserveAspectRatio="none" role="img" aria-label="Commanded and seen arm angle over the last 60 seconds"></svg>
+        </figure>
+      </div>
+
+      <div class="history">
+        <h2 class="field">Inspection history</h2>
+        <ol class="events" id="events"></ol>
+      </div>
+    </section>
+  </main>
+
+  <div class="offline" id="offline" hidden>
+    <p class="offline-title">Lost the connection to Vizion Motor</p>
+    <p>The page keeps trying. If it was closed on purpose, start it again with <code>./run_motor.sh</code>.</p>
+  </div>
+
+  <script src="/static/motor.js"></script>
+</body>
+</html>

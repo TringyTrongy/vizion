@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Vizion Motor
+Comment=Watches the servo arm with the webcam and stops it on an anomaly
+Exec=/home/vizion/vizion/run_motor.sh
+Icon=utilities-system-monitor
+Terminal=false
+Categories=Utility;

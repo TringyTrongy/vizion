@@ -20,6 +20,7 @@ Everything that runs on the Pi: a full-screen dashboard that shows the camera wi
 | `vizion-dashboard.desktop`, `vizion-camera.desktop` | Desktop icons |
 | `system/wifi-powersave-off.conf` | Turns Wi-Fi power saving off (the Pi kept dropping off the network) |
 | `test_*.py` | Tests. They need no camera, model or GPIO: `python test_tracker.py` and so on |
+| `motor_monitor/`, `run_motor.sh`, `vizion-motor.desktop` | **Vizion Motor**, the servo-arm anomaly dashboard (the SG90 on GPIO18 watched by the webcam; red LED on an anomaly). Its guide: [motor_monitor/README.md](motor_monitor/README.md) |
 
 ## Setup
 

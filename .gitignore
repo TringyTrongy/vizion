@@ -14,3 +14,4 @@ data/vizion/.webcam_added
 pi/empty_table.png
 pi/captures/
 *.log
+pi/motor_monitor/data/

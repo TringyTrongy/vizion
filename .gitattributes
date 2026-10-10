@@ -12,3 +12,4 @@
 *.bin binary
 *.woff binary
 *.param binary
+*.woff2 binary

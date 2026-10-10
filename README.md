@@ -7,6 +7,7 @@ Resistor and capacitor detection on a Raspberry Pi 5 with a USB webcam. A YOLO26
 | Path | Contents |
 |---|---|
 | [`pi/`](pi) | Everything that runs on the Pi: dashboard, camera preview, detector, tracker, LED driver, launchers, tests. Setup, controls and LED wiring are in [pi/README.md](pi/README.md) |
+| [`pi/motor_monitor/`](pi/motor_monitor) | **Vizion Motor**: watches the SG90 servo arm with the webcam, compares every frame with pictures of normal movement it learned, and stops the motor when they don't match (an anomaly). Guide in [its README](pi/motor_monitor/README.md) |
 | [`model/`](model) | The detector: NCNN model, PyTorch weights, training record and the [model card](model/README.md) (results, colour balance, training data, limitations) |
 | [`data/`](data) | The training dataset in YOLO format (2197 images) and the labelled webcam frames. Sources and licences are in [data/README.md](data/README.md) |
 | [`scripts/`](scripts) | The training pipeline: download, prepare, train, evaluate, export |
@@ -17,7 +18,8 @@ Resistor and capacitor detection on a Raspberry Pi 5 with a USB webcam. A YOLO26
 
 ```sh
 cd ~/vizion
-./run_dashboard.sh
+./run_dashboard.sh     # the camera: resistors and capacitors
+./run_motor.sh         # Vizion Motor: the servo arm
 ```
 
 [pi/README.md](pi/README.md) covers installing from scratch.
@@ -37,4 +39,4 @@ On Windows, run these as `.py` files, not through stdin. The dataloader workers 
 
 ## Licence
 
-The model is fine-tuned from Ultralytics YOLO26 (AGPL-3.0) and inherits that licence. One training source does not state a licence, so keep this repository private unless its author allows redistribution; [data/README.md](data/README.md) has the details. The dashboard's font is osifont (LGPL-3 with font exception).
+The model is fine-tuned from Ultralytics YOLO26 (AGPL-3.0) and inherits that licence. One training source does not state a licence, so keep this repository private unless its author allows redistribution; [data/README.md](data/README.md) has the details. The camera dashboard's font is osifont (LGPL-3 with font exception); Vizion Motor uses Barlow (SIL Open Font License, `pi/motor_monitor/web/fonts/OFL.txt`).
