@@ -117,4 +117,4 @@ To change the input size, re-export from the PyTorch weights:
 - Training data credits:
   - ElectroCom61: M. F. A. Sayeedi et al., *ElectroCom61: A Multiclass Dataset for Detection of Electronic Components*, Mendeley Data V2, doi:[10.17632/6scy6h8sjz.2](https://doi.org/10.17632/6scy6h8sjz.2), CC BY 4.0.
   - Resistor images: alptugaydin, Kaggle, CC BY 4.0.
-  - The akeshm Kaggle dataset does not state a licence. Check with its author before redistributing this model publicly.
+  - The akeshm Kaggle dataset does not state a licence. The model trained on it is public in this repository, with the author's permission not confirmed.

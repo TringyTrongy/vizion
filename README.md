@@ -41,4 +41,4 @@ On Windows, run these as `.py` files, not through stdin. The dataloader workers 
 
 ## Licence
 
-The model is fine-tuned from Ultralytics YOLO26 (AGPL-3.0) and inherits that licence. One training source does not state a licence, so keep this repository private unless its author allows redistribution; [data/README.md](data/README.md) has the details. The camera dashboard's font is osifont (LGPL-3 with font exception); Vizion Motor uses Barlow (SIL Open Font License, `pi/motor_monitor/web/fonts/OFL.txt`).
+The model is fine-tuned from Ultralytics YOLO26 (AGPL-3.0) and inherits that licence. One training source, the akeshm Kaggle dataset, does not state a licence. Its images (the `rdci_` files in `data/`) are in this public repository without the author's permission confirmed; [data/README.md](data/README.md) has the details. The camera dashboard's font is osifont (LGPL-3 with font exception); Vizion Motor uses Barlow (SIL Open Font License, `pi/motor_monitor/web/fonts/OFL.txt`).

@@ -79,5 +79,5 @@ To add new webcam frames, capture them with the Pi's camera preview (Capture but
 
 - ElectroCom61: M. F. A. Sayeedi et al., *ElectroCom61: A Multiclass Dataset for Detection of Electronic Components*, Mendeley Data V2, doi:[10.17632/6scy6h8sjz.2](https://doi.org/10.17632/6scy6h8sjz.2), CC BY 4.0. The images here are modified (relabelled, boxes changed, some degraded).
 - Resistor segmentation images: alptugaydin, Kaggle, CC BY 4.0. Modified (outlines converted to boxes, some degraded).
-- The `rdci_` images come from a Kaggle dataset that does not state a licence. Keep this repository private, or remove those images, unless the author gives permission to redistribute them.
+- The `rdci_` images come from a Kaggle dataset that does not state a licence. This repository is public, so those images are redistributed without the author's permission being confirmed. Treat them as unlicensed: do not reuse them elsewhere, and delete the `rdci_` files from `data/` if the author objects.
 - Webcam and synthetic images: made for this project.
