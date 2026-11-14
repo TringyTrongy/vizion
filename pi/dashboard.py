@@ -20,6 +20,12 @@ Web API (used by web/dashboard.js):
     POST /api/empty-table  {"action": "learn" | "forget"}
     POST /api/leds         {"action": "blink"}: blink the resistor and capacitor counts on the LEDs
     POST /api/quit         stop the dashboard
+    GET  /station          the inspection-station page (web/station.html): PASS/FAIL, KPIs, motor alert
+    POST /api/station      {"truth": "good" | "bad"} records the verdict for this tray; {"action": "reset"}
+
+Evidence it writes (logs/ next to this file): latency.csv, one row per LED change with the
+frame-to-LED time (latency_log.py), and station.csv, the operator-labelled pass/fail trays (station.py).
+With VIZION_MQTT_PASSWORD set it also publishes to the MQTT broker (mqtt_link.py).
 """
 import argparse
 import glob
@@ -37,7 +43,10 @@ import cv2
 
 from camera_preview import DEFAULT_MODEL, DET_CANDIDATE_CONF, FrameGrabber, detect_right_padding, try_open_camera
 from dashboard_logic import Designators, EmptyTable, count_parts, describe_parts
+from latency_log import LatencyLog
 from leds import Leds
+from mqtt_link import MqttLink
+from station import NONE, Station, parse_expect, verdict
 
 HERE = Path(__file__).resolve().parent
 WEB = HERE / "web"
@@ -52,6 +61,22 @@ HIDE_RATIO = 0.6  # a shown part is hidden again below 60% of --conf (hysteresis
 CONTENT_TYPES = {".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8",
                  ".js": "text/javascript; charset=utf-8", ".woff": "font/woff", ".woff2": "font/woff2",
                  ".svg": "image/svg+xml", ".png": "image/png", ".txt": "text/plain; charset=utf-8"}
+
+
+class SimLed:
+    """Stands in for gpiozero.LED in tests away from the Pi (--sim-leds): switches nothing."""
+
+    def __init__(self, pin):
+        self.pin, self.is_lit = pin, False
+
+    def on(self):
+        self.is_lit = True
+
+    def off(self):
+        self.is_lit = False
+
+    def close(self):
+        pass
 
 
 def find_camera(device):
@@ -246,7 +271,14 @@ class Dashboard:
     def __init__(self, args):
         self.args = args
         self.camera, self.model, self.empty = Camera(args), Model(args), EmptyTable(args.empty_table)
-        self.leds = Leds([("resistor", *args.resistor_led), ("capacitor", *args.capacitor_led)])
+        self.latency = LatencyLog(args.latency_log)
+        self.leds = Leds([("resistor", *args.resistor_led), ("capacitor", *args.capacitor_led)],
+                         device=SimLed if args.sim_leds else None, on_change=self._led_changed)
+        self.station = Station(parse_expect(args.expect), args.station_log)
+        self.mqtt = MqttLink("vizion-dashboard")
+        self.mqtt.subscribe("vizion/motor/score")
+        self.frame_times = {}  # frame seq -> monotonic time it reached the pipeline
+        self.result_frame_t = None  # that time for the frame behind the latest detection result
         self.tracker = self.designators = None
         self.detect_on = True
         self.commands = queue.Queue()
@@ -309,7 +341,8 @@ class Dashboard:
             return
         result = m.proc.poll()
         if result and self.detect_on:
-            _, dets, ms = result
+            seq, dets, ms = result
+            self.result_frame_t = self.frame_times.get(seq)
             self.tracker.update(dets)
             self.det_ms = ms if self.det_ms == 0 else 0.8 * self.det_ms + 0.2 * ms
             self.results += 1
@@ -336,6 +369,9 @@ class Dashboard:
         if self.frame is not None and frame.shape != self.frame.shape:
             self._clear_parts()  # a different camera mode; old boxes no longer fit
         self.frame, self.frame_seq = frame, self.frame_seq + 1
+        self.frame_times[self.frame_seq] = now
+        if len(self.frame_times) > 64:
+            del self.frame_times[min(self.frame_times)]
         if self.t_frame:
             dt = now - self.t_frame
             self.fps = 1 / dt if self.fps == 0 else 0.9 * self.fps + 0.1 / dt
@@ -362,17 +398,33 @@ class Dashboard:
 
     def _publish(self, jpeg, now):
         self.t_state = now
-        self.leds.show(self._live_counts())
-        state = json.dumps(self._state(now), separators=(",", ":"))
+        counts = self._live_counts()
+        # Without a picture the LEDs go dark (safe state) and no latency is measured for that.
+        self.leds.show(counts, self.result_frame_t if counts is not None else None)
+        snapshot = self._state(now)
+        st = snapshot["station"]
+        self.mqtt.publish("vizion/detections", {"counts": counts, "verdict": st["verdict"], "reason": st["reason"],
+                                                "camera": self.camera.state, "model": self.model.state},
+                          every_s=1.0)
+        state = json.dumps(snapshot, separators=(",", ":"))
         with self.cond:
             if jpeg is not None:
                 self.pub_seq, self.pub_jpeg = self.frame_seq, jpeg
             self.pub_state = state
             self.cond.notify_all()
 
+    def _led_changed(self, cls, on, t, frame_t):
+        """Called by the LED thread right after a pin switched: one latency event."""
+        self.latency.record(cls, on, t, frame_t, self.det_ms or None)
+
+    def _verdict(self, counts):
+        unknown = self.empty.state if counts is not None else None
+        return verdict(counts, self.station.expect, unknown)
+
     def _state(self, now):
         m, cam = self.model, self.camera
         counts = self._live_counts()
+        verdict_now, reason = self._verdict(counts)
         working = counts is not None
         if not self.detect_on:
             unknown = "off"
@@ -397,6 +449,11 @@ class Dashboard:
                         "learned_at": self.empty.learned_at and int(self.empty.learned_at * 1000)},
             "notice": notice and {"kind": notice[0], "text": notice[1]},
             "leds": self.leds.state(),
+            "station": {"expect": self.station.expect, "verdict": verdict_now, "reason": reason,
+                        "score": self.station.score(), "last": self.station.rows[-1] if self.station.rows else None},
+            "latency": self.latency.summary(),
+            "mqtt": self.mqtt.state(),
+            "motor": self.mqtt.latest("vizion/motor/score"),
         }
 
     def _handle_commands(self):
@@ -453,6 +510,19 @@ class Dashboard:
         print(f"Blinking counts: {counts['resistor']} resistors, {counts['capacitor']} capacitors", flush=True)
         return {"ok": True, "seconds": round(seconds, 1), "counts": counts}
 
+    def _cmd_station(self, action, truth=None):
+        if action == "reset":
+            self.station.reset()
+            return self._notice(True, "Pass/fail score cleared.")
+        counts = self._live_counts()
+        current, reason = self._verdict(counts)
+        try:
+            row = self.station.label(truth, current, counts, reason)
+        except ValueError as e:
+            return self._notice(False, str(e))
+        print(f"Tray {row['tray']}: truth {truth}, verdict {current} ({reason})", flush=True)
+        return {"ok": True, "row": row, "score": self.station.score()}
+
     def _notice(self, ok, text):
         self.notice = ("ok" if ok else "error", text, time.monotonic() + NOTICE_S)
         return {"ok": ok, "message": text}
@@ -468,6 +538,7 @@ class Dashboard:
         self.camera.close()
         self.model.close()
         self.leds.close()
+        self.mqtt.close()
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -498,6 +569,8 @@ class Handler(BaseHTTPRequestHandler):
             self._send(200, "application/json", self.dash.state_json().encode())
         elif url.path in ("/", "/index.html"):
             self._file("index.html")
+        elif url.path in ("/station", "/station.html"):
+            self._file("station.html")
         elif url.path.startswith("/static/"):
             self._file(url.path[len("/static/"):])
         else:
@@ -516,6 +589,8 @@ class Handler(BaseHTTPRequestHandler):
             result = self.dash.request("empty_table", body.get("action", "learn"))
         elif url.path == "/api/leds":
             result = self.dash.request("leds", body.get("action", "blink"))
+        elif url.path == "/api/station":
+            result = self.dash.request("station", body.get("action", "label"), body.get("truth"))
         elif url.path == "/api/quit":
             result = self.dash.request("quit")
         else:
@@ -576,6 +651,13 @@ def main():
     ap.add_argument("--source", type=Path, help="test: show these image files instead of the camera")
     ap.add_argument("--source-hold", type=float, default=1e9, help="test: seconds to show each --source image")
     ap.add_argument("--stats", action="store_true", help="print frame and detection rates every 5 s")
+    ap.add_argument("--sim-leds", action="store_true", help="test: pretend LEDs, for runs away from the Pi")
+    ap.add_argument("--expect", default="resistor=2,capacitor=2",
+                    help="the kit that passes inspection, e.g. resistor=2,capacitor=2")
+    ap.add_argument("--latency-log", type=Path, default=HERE / "logs" / "latency.csv",
+                    help="CSV of frame-to-LED latency, one row per LED change")
+    ap.add_argument("--station-log", type=Path, default=HERE / "logs" / "station.csv",
+                    help="CSV of the operator-labelled pass/fail trays")
     args = ap.parse_args()
 
     dash = Dashboard(args)

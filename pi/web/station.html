@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vizion · Inspection station</title>
+<style>
+  :root { --ink:#1b1f24; --paper:#f4f1e8; --line:#1b1f24; --muted:#5b636d; --pass:#1f7a3a; --fail:#b3261e; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.35 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { display:grid; grid-template-columns: minmax(0,1.6fr) minmax(320px,1fr); gap:16px; padding:16px; height:100vh; }
+  .view { position:relative; margin:0; border:2px solid var(--line); background:#000; min-height:0; }
+  .view canvas { width:100%; height:100%; object-fit:contain; display:block; }
+  .view svg { position:absolute; inset:0; width:100%; height:100%; }
+  .view .msg { position:absolute; inset:auto 0 0 0; margin:0; background:rgba(0,0,0,.75); color:#fff; padding:8px 12px; font-weight:600; }
+  aside { display:flex; flex-direction:column; gap:12px; min-height:0; overflow:auto; }
+  section { border:2px solid var(--line); padding:12px; background:#fff; }
+  h2 { margin:0 0 8px; font-size:13px; letter-spacing:.08em; color:var(--muted); }
+  .verdict { font-size:56px; font-weight:800; text-align:center; padding:8px; color:#fff; background:var(--muted); }
+  .verdict[data-v="PASS"] { background:var(--pass); }
+  .verdict[data-v="FAIL"] { background:var(--fail); }
+  .reason { text-align:center; margin:6px 0 0; font-weight:600; }
+  .kpis { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .kpi { border:1px solid var(--line); padding:8px; text-align:center; }
+  .kpi b { display:block; font-size:26px; font-variant-numeric:tabular-nums; }
+  .kpi span { font-size:12px; color:var(--muted); }
+  table { width:100%; border-collapse:collapse; margin-top:8px; font-variant-numeric:tabular-nums; }
+  td, th { border:1px solid var(--line); padding:4px 6px; text-align:center; }
+  .buttons { display:flex; gap:8px; margin-top:8px; }
+  button { flex:1; font:inherit; font-weight:700; padding:12px; border:2px solid var(--line); background:#fff; cursor:pointer; min-height:48px; color:var(--ink); }
+  button.good { background:#e3f2e7; } button.bad { background:#f8e1df; }
+  button:focus-visible { outline:3px solid #1a5fb4; outline-offset:2px; }
+  .motor[data-alert="true"] { background:var(--fail); color:#fff; }
+  .motor[data-alert="true"] h2 { color:#fff; }
+  .small { font-size:13px; color:var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <figure class="view" aria-label="Live camera with detections">
+    <canvas id="frame" width="640" height="480"></canvas>
+    <svg id="overlay" viewBox="0 0 640 480" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+    <p class="msg" id="msg" role="status" hidden></p>
+  </figure>
+  <aside>
+    <section aria-live="polite">
+      <h2>VERDICT · EXPECTED KIT: <span id="expect"></span></h2>
+      <div class="verdict" id="verdict" data-v="NO VERDICT">…</div>
+      <p class="reason" id="reason">&nbsp;</p>
+    </section>
+    <section>
+      <h2>KPIs (LIVE)</h2>
+      <div class="kpis">
+        <div class="kpi"><b id="kFps">–</b><span>camera FPS</span></div>
+        <div class="kpi"><b id="kDet">–</b><span>detector ms per frame</span></div>
+        <div class="kpi"><b id="kLat">–</b><span>frame→LED median ms (p95 <i id="kP95">–</i>, n <i id="kN">0</i>)</span></div>
+      </div>
+    </section>
+    <section>
+      <h2>HEADLINE METRIC · CORRECT VERDICTS</h2>
+      <div class="kpis">
+        <div class="kpi"><b id="hCorrect">0 / 0</b><span>trays judged correctly</span></div>
+        <div class="kpi"><b id="hFalsePass">–</b><span>false-pass rate</span></div>
+        <div class="kpi"><b id="hAcc">–</b><span>accuracy</span></div>
+      </div>
+      <table aria-label="Confusion matrix">
+        <tr><th scope="col">truth \ verdict</th><th scope="col">PASS</th><th scope="col">FAIL</th></tr>
+        <tr><th scope="row">good</th><td id="mGP">0</td><td id="mGF">0</td></tr>
+        <tr><th scope="row">defective</th><td id="mBP">0</td><td id="mBF">0</td></tr>
+      </table>
+      <div class="buttons">
+        <button class="good" id="good" type="button" aria-keyshortcuts="G">GOOD TRAY (G)</button>
+        <button class="bad" id="bad" type="button" aria-keyshortcuts="F">DEFECTIVE TRAY (F)</button>
+      </div>
+      <p class="small" id="last" role="status">Lay out a tray, then press what it really is. Vizion's verdict at that moment is scored.</p>
+    </section>
+    <section class="motor" id="motor" data-alert="false">
+      <h2>MOTOR (VIA MQTT)</h2>
+      <p id="motorText">No motor data yet.</p>
+    </section>
+    <section>
+      <h2>DETECTIONS</h2>
+      <ul id="parts"><li>Waiting…</li></ul>
+      <p class="small">MQTT: <span id="mqtt">–</span> · <a href="/">Main dashboard</a></p>
+    </section>
+  </aside>
+</main>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const ctx = $('frame').getContext('2d');
+  let seq = 0;
+  const fmt = (v, d = 0) => (v === null || v === undefined ? '–' : Number(v).toFixed(d));
+  const pct = (v) => (v === null || v === undefined ? '–' : `${Math.round(v * 100)}%`);
+  const SVG = 'http://www.w3.org/2000/svg';
+
+  function render(s) {
+    const st = s.station || {};
+    $('expect').textContent = Object.entries(st.expect || {}).map(([k, v]) => `${v}× ${k}`).join(', ');
+    $('verdict').dataset.v = st.verdict || 'NO VERDICT';
+    $('verdict').textContent = st.verdict || 'NO VERDICT';
+    $('reason').textContent = st.reason || '';
+    $('kFps').textContent = fmt(s.camera && s.camera.fps, 1);
+    $('kDet').textContent = fmt(s.model && s.model.ms);
+    const lat = s.latency || {};
+    $('kLat').textContent = fmt(lat.median_ms);
+    $('kP95').textContent = fmt(lat.p95_ms);
+    $('kN').textContent = lat.n || 0;
+    const sc = st.score || {};
+    $('hCorrect').textContent = `${sc.correct || 0} / ${sc.trays || 0}`;
+    $('hFalsePass').textContent = pct(sc.false_pass_rate);
+    $('hAcc').textContent = pct(sc.accuracy);
+    const m = sc.matrix || {};
+    $('mGP').textContent = m.good_pass || 0; $('mGF').textContent = m.good_fail || 0;
+    $('mBP').textContent = m.bad_pass || 0; $('mBF').textContent = m.bad_fail || 0;
+    const cam = s.camera || {};
+    $('msg').hidden = cam.state === 'ok';
+    $('msg').textContent = cam.state === 'ok' ? '' : `CAMERA ${String(cam.state).toUpperCase()}: ${cam.detail || ''} · LEDs off (safe state)`;
+    const parts = s.parts || [];
+    const list = $('parts');
+    list.replaceChildren(...(parts.length ? parts : [null]).map((p) => {
+      const li = document.createElement('li');
+      li.textContent = p ? `${p.ref} ${p.cls} ${Math.round(p.conf * 100)}% · zone ${p.zone}` : 'Nothing detected.';
+      return li;
+    }));
+    const svg = $('overlay');
+    if (cam.size) svg.setAttribute('viewBox', `0 0 ${cam.size[0]} ${cam.size[1]}`);
+    svg.replaceChildren(...parts.flatMap((p) => {
+      const [x1, y1, x2, y2] = p.box;
+      const c = p.cls === 'resistor' ? '#ff4d4d' : '#ffd23f';
+      const r = document.createElementNS(SVG, 'rect');
+      Object.entries({ x: x1, y: y1, width: x2 - x1, height: y2 - y1, fill: 'none', stroke: c, 'stroke-width': 3 })
+        .forEach(([k, v]) => r.setAttribute(k, v));
+      const t = document.createElementNS(SVG, 'text');
+      Object.entries({ x: x1 + 4, y: Math.max(16, y1 - 6), fill: c, 'font-size': 18, 'font-weight': 700 })
+        .forEach(([k, v]) => t.setAttribute(k, v));
+      t.textContent = `${p.ref} ${Math.round(p.conf * 100)}%`;
+      return [r, t];
+    }));
+    const mq = s.mqtt || {};
+    $('mqtt').textContent = mq.enabled ? mq.detail : 'off';
+    const mo = s.motor && s.motor.payload;
+    if (mo && typeof mo === 'object') {
+      const age = Math.max(0, Math.round(Date.now() / 1000 - (mo.ts || 0)));
+      const alert = mo.state === 'ANOMALY' || (mo.limit && mo.mismatch > mo.limit);
+      $('motor').dataset.alert = String(Boolean(alert));
+      $('motorText').textContent = `${alert ? 'MOTOR ALERT · ' : ''}${mo.state} · mismatch ${fmt(mo.mismatch, 3)} (limit ${fmt(mo.limit, 3)}) · ${age} s ago`;
+    }
+  }
+
+  async function loop() {
+    for (;;) {
+      try {
+        const res = await fetch(`/frame?after=${seq}`, { cache: 'no-store', signal: AbortSignal.timeout(4000) });
+        const header = res.headers.get('X-Vizion');
+        if (res.status === 200) {
+          const bmp = await createImageBitmap(await res.blob());
+          if ($('frame').width !== bmp.width) { $('frame').width = bmp.width; $('frame').height = bmp.height; }
+          ctx.drawImage(bmp, 0, 0);
+          bmp.close();
+        }
+        if (header) { const s = JSON.parse(header); seq = s.seq; render(s); }
+      } catch (e) {
+        $('msg').hidden = false;
+        $('msg').textContent = 'NO CONNECTION TO THE VIZION SERVICE · retrying';
+        await new Promise((r) => setTimeout(r, 1000));
+      }
+    }
+  }
+
+  async function label(truth) {
+    try {
+      const res = await fetch('/api/station', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ truth }) });
+      const r = await res.json();
+      $('last').textContent = r.ok
+        ? `Tray ${r.row.tray}: ${r.row.truth} → ${r.row.verdict} (${r.row.correct === 'yes' ? 'correct' : 'WRONG'})`
+        : r.message;
+    } catch (e) {
+      $('last').textContent = 'Could not reach Vizion; try again.';
+    }
+  }
+  $('good').addEventListener('click', () => label('good'));
+  $('bad').addEventListener('click', () => label('bad'));
+  document.addEventListener('keydown', (e) => {
+    if (e.repeat || e.target.closest('button')) return;
+    if (e.key === 'g' || e.key === 'G') label('good');
+    if (e.key === 'f' || e.key === 'F') label('bad');
+  });
+  loop();
+})();
+</script>
+</body>
+</html>

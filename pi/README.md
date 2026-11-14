@@ -131,6 +131,20 @@ USB camera ─► FrameGrabber thread (newest frame only, 15 fps cap)
 - **Colour balance.** In bright light the webcam turns everything cyan and blue capacitors wash out, so each frame is colour-balanced before detection. This raised capacitor confidence from about 0.3 to 0.9 in bright light; the numbers are in the [model card](../model/README.md#colour-balance-before-detection).
 - **Tracker.** The tracker shows a part once it is seen twice above the threshold, keeps it through a few missed frames, and keeps its designator while it stays. The confidence on screen is the detector's score averaged over recent frames.
 
+## Inspection station, latency, MQTT and PLC (M3–M5)
+
+| Added | What it does |
+|---|---|
+| `station.py`, `web/station.html` | The pass/fail station at `http://127.0.0.1:8765/station`: PASS/FAIL for the expected kit (`--expect resistor=2,capacitor=2`), 3 live KPIs (camera FPS, detector ms, frame-to-LED latency), the headline metric (correct verdicts out of N, false-pass rate, confusion matrix; press G/F to label each tray) and the motor alert received over MQTT. Trays are kept in `logs/station.csv` |
+| `latency_log.py` | One row per LED change in `logs/latency.csv`: time from the camera frame to the GPIO pin. `python latency_log.py logs/latency.csv` prints n, median, p95 |
+| `two_stream.py` | Two streams detected at once with FPS per stream |
+| `mqtt_link.py` | Publishes `vizion/detections` (and the motor score from Vizion Motor) to the TLS broker when `VIZION_MQTT_PASSWORD` is set; see [../mqtt/README.md](../mqtt/README.md) |
+| `drift_report.py` | Compares new frames with a baseline (brightness, contrast, colour, sharpness, detector confidence) |
+| `mpu6050/` | MPU6050 logger and the anomaly model trained on normal vibration only |
+| `system/` | systemd service with auto-restart, crash test, OTA update with rollback, kiosk autostart |
+
+The decision rules and the safe state are in [../docs/M3_decision_rules.md](../docs/M3_decision_rules.md); the step-by-step list for measuring everything on the Pi is [../docs/PI_RUNBOOK.md](../docs/PI_RUNBOOK.md). Away from the Pi, `--sim-leds --source <folder>` runs the whole chain on test images.
+
 ## Troubleshooting
 
 - **"No camera signal".** Check the USB cable. Vizion retries every 2 seconds and carries on by itself.
