@@ -31,5 +31,5 @@ Setup once: `cd ~/vizion-repo && git pull`, then `cp -r pi/* ~/vizion/` (or use 
 |---|---|---|
 | 12 | Rig: fix the camera on a stand at a measured height, lamp on, and photograph it | `evidence/m5/rig.jpg` |
 | 13 | Pass/fail: 20 trays (10 correct kits of 2R+2C, 10 defective: missing/extra/wrong part, unknown object). For each, press GOOD or DEFECTIVE on `/station` | `logs/station.csv` + a screenshot of the matrix → `evidence/m5/` |
-| 14 | Full chain: run everything for **10 minutes** with `--stats`, note anything that breaks and the fix | `dashboard.log` → `evidence/m5/full_chain_10min.log` |
+| 14 | Full chain: run everything for **10 minutes** with `--stats`, note anything that breaks and the fix | `dashboard.log` → `evidence/m5/full_chain_10min.txt` |
 | 15 | Product readiness: power-cycle with the network cable out; the station page must come up by itself | video → `evidence/m5/power_cycle.mp4` |
