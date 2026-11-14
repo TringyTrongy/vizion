@@ -30,6 +30,9 @@ import numpy as np
 
 import motor_rig
 import motor_watch
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # pi/, for the shared MQTT link
+from mqtt_link import MqttLink  # noqa: E402
 from motor_watch import ANOMALY, LEARNING, Master, Monitor, grey_small
 
 HERE = Path(__file__).resolve().parent
@@ -151,6 +154,7 @@ class App:
         self.plates = {}  # small cache of encoded panes
         self.saved_evidence = set()
         self.learned = self.monitor.counts["learned"]
+        self.mqtt = MqttLink("vizion-motor")  # off unless VIZION_MQTT_PASSWORD is set
         self.threads = [threading.Thread(target=self._camera_loop, daemon=True, name="camera"),
                         threading.Thread(target=self._motion_loop, daemon=True, name="motion"),
                         threading.Thread(target=self._housekeeping, daemon=True, name="housekeeping")]
@@ -207,6 +211,17 @@ class App:
                 self.recorder.flush()
             except OSError as e:
                 print(f"Could not write the log: {e}", file=sys.stderr)
+            self._publish_score()
+
+    def _publish_score(self):
+        """vizion/motor/score, retained, so the station page shows the motor's last state."""
+        with self.lock:
+            snap = self.monitor.snapshot(time.monotonic())
+        now = snap["now"]
+        self.mqtt.publish("vizion/motor/score", {"state": snap["state"], "reason": snap["reason"],
+                                                 "mismatch": now["mismatch"], "limit": now["limit"],
+                                                 "fps": now["fps"], "anomalies": snap["counts"].get("anomalies", 0)},
+                          every_s=1.0, retain=True)
 
     # --- Pictures -------------------------------------------------------------------------------
 
@@ -355,6 +370,7 @@ class App:
             if self.camera is not None and self.camera is not self.outputs:
                 self.camera.close()
             self.recorder.flush()
+            self.mqtt.close()
 
 
 class Handler(BaseHTTPRequestHandler):

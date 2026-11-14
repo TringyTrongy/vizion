@@ -1,0 +1,6 @@
+Broker localhost:8883  CA mqtt/certs/ca.crt  2026-11-14 17:37:23
+1 no password, TLS                     expected refused exit 5   PASS  | Connection error: Connection Refused: not authorised
+2 wrong password, TLS                  expected refused exit 5   PASS  | Connection error: Connection Refused: not authorised
+3 right password, no TLS               expected refused exit 14  PASS  | Error: Protocol error
+4 right password + TLS (pub+sub)       expected works   exit 0   PASS  | hello-1794658044
+ALL 4 CHECKS PASSED

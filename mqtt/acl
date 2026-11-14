@@ -1,0 +1,9 @@
+# Who may do what. Anything not listed is denied.
+# vizion: the Pi's own programs publish results and read the motor score.
+user vizion
+topic write vizion/#
+topic read vizion/#
+
+# viewer: dashboards and the PLC bridge on other machines may only read.
+user viewer
+topic read vizion/#

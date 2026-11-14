@@ -1,0 +1,28 @@
+# Vizion detector + dashboard server as a system service: starts at boot (no login needed) and is
+# restarted automatically 2 s after any crash.
+#
+#   sudo cp system/vizion-dashboard.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now vizion-dashboard
+#   journalctl -u vizion-dashboard -f            # its log
+#   ./system/crash_test.sh                       # kill -9 it and time the restart
+#
+# The screen side is system/vizion-kiosk.desktop (Chromium full screen on /station).
+[Unit]
+Description=Vizion detector and dashboard
+After=network.target
+StartLimitIntervalSec=300
+StartLimitBurst=10
+
+[Service]
+User=vizion
+WorkingDirectory=/home/vizion/vizion
+# optional: VIZION_MQTT_PASSWORD=... for the MQTT link (chmod 600, never in the repo)
+EnvironmentFile=-/home/vizion/.config/vizion/env
+ExecStart=/home/vizion/vizion/.venv/bin/python dashboard.py --host 0.0.0.0 --port 8765
+Restart=always
+RestartSec=2
+KillSignal=SIGTERM
+TimeoutStopSec=10
+
+[Install]
+WantedBy=multi-user.target

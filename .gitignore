@@ -19,3 +19,9 @@ pi/sensor_monitor/data/exports/
 *.part
 pi/motor_monitor/data/
 pi/sensor_monitor/data/fan_settings.json
+pi/logs/
+
+# MQTT secrets and generated keys (made by mqtt/setup_broker.sh on the Pi)
+mqtt/certs/
+mqtt/passwd
+docker/.env

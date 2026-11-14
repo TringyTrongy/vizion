@@ -1,0 +1,30 @@
+vizion/status online
+vizion/motor/score {"state":"NOT LEARNED","reason":"Press Learn normal: the arm sweeps for 30 s while the camera learns what normal looks like.","mismatch":null,"limit":null,"fps":8.5,"anomalies":0,"ts":1794658076.102}
+vizion/detections {"counts":{"resistor":2,"capacitor":2,"total":4},"verdict":"PASS","reason":"Kit complete","camera":"ok","model":"ready","ts":1794658077.096}
+vizion/motor/score {"state":"NOT LEARNED","reason":"Press Learn normal: the arm sweeps for 30 s while the camera learns what normal looks like.","mismatch":null,"limit":null,"fps":8.5,"anomalies":0,"ts":1794658077.104}
+vizion/detections {"counts":{"resistor":2,"capacitor":2,"total":4},"verdict":"PASS","reason":"Kit complete","camera":"ok","model":"ready","ts":1794658078.098}
+vizion/motor/score {"state":"NOT LEARNED","reason":"Press Learn normal: the arm sweeps for 30 s while the camera learns what normal looks like.","mismatch":null,"limit":null,"fps":8.5,"anomalies":0,"ts":1794658078.113}
+vizion/motor/score {"state":"NOT LEARNED","reason":"Press Learn normal: the arm sweeps for 30 s while the camera learns what normal looks like.","mismatch":null,"limit":null,"fps":8.5,"anomalies":0,"ts":1794658079.123}
+vizion/detections {"counts":{"resistor":2,"capacitor":2,"total":4},"verdict":"PASS","reason":"Kit complete","camera":"ok","model":"ready","ts":1794658079.158}
+vizion/detections {"counts":{"resistor":0,"capacitor":0,"total":0},"verdict":"FAIL","reason":"resistor 0/2; capacitor 0/2","camera":"ok","model":"ready","ts":1794658079.891}
+vizion/detections {"counts":{"resistor":2,"capacitor":2,"total":4},"verdict":"PASS","reason":"Kit complete","camera":"ok","model":"ready","ts":1794658079.965}
+vizion/detections {"counts":{"resistor":0,"capacitor":0,"total":0},"verdict":"FAIL","reason":"resistor 0/2; capacitor 0/2","camera":"ok","model":"ready","ts":1794658080.031}
+vizion/motor/score {"state":"NOT LEARNED","reason":"Press Learn normal: the arm sweeps for 30 s while the camera learns what normal looks like.","mismatch":null,"limit":null,"fps":8.5,"anomalies":0,"ts":1794658080.133}
+vizion/detections {"counts":{"resistor":0,"capacitor":0,"total":0},"verdict":"FAIL","reason":"resistor 0/2; capacitor 0/2","camera":"ok","model":"ready","ts":1794658081.098}
+vizion/motor/score {"state":"NOT LEARNED","reason":"Press Learn normal: the arm sweeps for 30 s while the camera learns what normal looks like.","mismatch":null,"limit":null,"fps":8.5,"anomalies":0,"ts":1794658081.143}
+vizion/detections {"counts":{"resistor":2,"capacitor":2,"total":4},"verdict":"PASS","reason":"Kit complete","camera":"ok","model":"ready","ts":1794658082.097}
+vizion/motor/score {"state":"NOT LEARNED","reason":"Press Learn normal: the arm sweeps for 30 s while the camera learns what normal looks like.","mismatch":null,"limit":null,"fps":8.5,"anomalies":0,"ts":1794658082.144}
+vizion/detections {"counts":{"resistor":2,"capacitor":2,"total":4},"verdict":"PASS","reason":"Kit complete","camera":"ok","model":"ready","ts":1794658083.098}
+vizion/motor/score {"state":"NOT LEARNED","reason":"Press Learn normal: the arm sweeps for 30 s while the camera learns what normal looks like.","mismatch":null,"limit":null,"fps":8.5,"anomalies":0,"ts":1794658083.154}
+vizion/motor/score {"state":"NOT LEARNED","reason":"Press Learn normal: the arm sweeps for 30 s while the camera learns what normal looks like.","mismatch":null,"limit":null,"fps":8.5,"anomalies":0,"ts":1794658084.164}
+vizion/detections {"counts":{"resistor":2,"capacitor":2,"total":4},"verdict":"PASS","reason":"Kit complete","camera":"ok","model":"ready","ts":1794658084.165}
+vizion/detections {"counts":{"resistor":0,"capacitor":0,"total":0},"verdict":"FAIL","reason":"resistor 0/2; capacitor 0/2","camera":"ok","model":"ready","ts":1794658084.898}
+vizion/detections {"counts":{"resistor":2,"capacitor":2,"total":4},"verdict":"PASS","reason":"Kit complete","camera":"ok","model":"ready","ts":1794658084.965}
+vizion/detections {"counts":{"resistor":0,"capacitor":0,"total":0},"verdict":"FAIL","reason":"resistor 0/2; capacitor 0/2","camera":"ok","model":"ready","ts":1794658085.03}
+vizion/motor/score {"state":"NOT LEARNED","reason":"Press Learn normal: the arm sweeps for 30 s while the camera learns what normal looks like.","mismatch":null,"limit":null,"fps":8.5,"anomalies":0,"ts":1794658085.174}
+vizion/detections {"counts":{"resistor":0,"capacitor":0,"total":0},"verdict":"FAIL","reason":"resistor 0/2; capacitor 0/2","camera":"ok","model":"ready","ts":1794658086.093}
+vizion/motor/score {"state":"NOT LEARNED","reason":"Press Learn normal: the arm sweeps for 30 s while the camera learns what normal looks like.","mismatch":null,"limit":null,"fps":8.5,"anomalies":0,"ts":1794658086.184}
+vizion/detections {"counts":{"resistor":2,"capacitor":2,"total":4},"verdict":"PASS","reason":"Kit complete","camera":"ok","model":"ready","ts":1794658087.098}
+vizion/motor/score {"state":"NOT LEARNED","reason":"Press Learn normal: the arm sweeps for 30 s while the camera learns what normal looks like.","mismatch":null,"limit":null,"fps":8.5,"anomalies":0,"ts":1794658087.194}
+vizion/detections {"counts":{"resistor":2,"capacitor":2,"total":4},"verdict":"PASS","reason":"Kit complete","camera":"ok","model":"ready","ts":1794658088.098}
+vizion/motor/score {"state":"NOT LEARNED","reason":"Press Learn normal: the arm sweeps for 30 s while the camera learns what normal looks like.","mismatch":null,"limit":null,"fps":8.5,"anomalies":0,"ts":1794658088.204}

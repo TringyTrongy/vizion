@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Vizion Station (kiosk)
+Comment=Opens the inspection station page full screen once the vizion-dashboard service answers
+# Copy to ~/.config/autostart/ so it opens at every boot. The loop waits for the service.
+Exec=sh -c 'until curl -fs http://127.0.0.1:8765/api/state >/dev/null; do sleep 1; done; chromium --kiosk http://127.0.0.1:8765/station --user-data-dir=$HOME/.config/vizion-kiosk --ozone-platform=wayland --noerrdialogs --disable-infobars --no-first-run --password-store=basic'
+Terminal=false
+X-GNOME-Autostart-enabled=true
