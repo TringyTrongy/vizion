@@ -1,0 +1,8 @@
+ultralytics==8.4.173
+ncnn
+opencv-python-headless
+numpy<2.3
+pyyaml
+gpiozero==2.0.1
+lgpio
+paho-mqtt==2.1.0

@@ -1,0 +1,15 @@
+.git
+**/__pycache__
+**/.venv
+pi/logs
+pi/captures
+pi/empty_table.png
+pi/motor_monitor/data
+pi/sensor_monitor/data/log
+data
+runs
+model/training
+mqtt/certs
+mqtt/passwd
+docker/.env
+evidence

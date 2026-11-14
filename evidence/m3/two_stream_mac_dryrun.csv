@@ -1,0 +1,7 @@
+wall_time,stream,source,video_fps,detect_fps,detect_ms_median,objects_last
+2026-11-14 17:35:20,A,test_frames_with_blanks,15.19,14.99,9.7,4
+2026-11-14 17:35:25,A,test_frames_with_blanks,14.99,14.59,9.6,0
+2026-11-14 17:35:30,A,test_frames_with_blanks,14.99,14.99,9.7,0
+2026-11-14 17:35:20,B,../data/webcam/raw,14.99,14.99,17.5,4
+2026-11-14 17:35:25,B,../data/webcam/raw,15.19,14.39,17.0,4
+2026-11-14 17:35:30,B,../data/webcam/raw,14.99,14.99,17.7,4

@@ -45,7 +45,9 @@ def lit_at(spans, elapsed):
 class Leds:
     """leds: [(class, GPIO number, colour name), ...] in blink order. GPIO None leaves that LED out."""
 
-    def __init__(self, leds, device=None):
+    def __init__(self, leds, device=None, on_change=None):
+        self.on_change = on_change  # on_change(cls, on, monotonic time, cause) after a pin switches
+        self.cause = None  # what the caller passed with the latest show(), e.g. the frame's time
         self.leds = [(cls, gpio, color) for cls, gpio, color in leds if gpio is not None]
         self.order = [cls for cls, _, _ in self.leds]
         self.devices, self.available, self.detail = {}, False, "No LEDs configured"
@@ -68,9 +70,13 @@ class Leds:
         if self.available:
             self._thread.start()
 
-    def show(self, present):
-        """present: {class: bool} (anything true lights that LED), or None for all off."""
+    def show(self, present, cause=None):
+        """present: {class: bool} (anything true lights that LED), or None for all off.
+
+        cause is handed back to on_change when a pin switches (the dashboard passes the capture
+        time of the frame behind this decision, to measure frame-to-LED latency)."""
         self.presence = {cls: bool(present and present.get(cls)) for cls in self.order}
+        self.cause = cause
 
     def blink_counts(self, counts):
         """Starts a count; returns its duration in seconds (0 if there is nothing to count)."""
@@ -106,6 +112,11 @@ class Leds:
                         self.available, self.detail = False, f"{type(e).__name__}: {e}"
                         print(f"LED {cls} failed: {self.detail}", flush=True)
                         return
+                    if self.on_change and self.count is None:  # presence changes only, not blink counts
+                        try:
+                            self.on_change(cls, on, time.monotonic(), self.cause)
+                        except Exception as e:  # a logging problem must never stop the LEDs
+                            print(f"LED change hook failed: {e!r}", flush=True)
             self._stop.wait(TICK_S)
 
     def state(self):

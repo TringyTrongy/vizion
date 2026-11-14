@@ -1,0 +1,54 @@
+# Vizion on the Pi: the detector/dashboard and the MQTT broker, both restarted automatically.
+#
+#   docker compose -f docker/docker-compose.yml up -d --build      # build + start
+#   docker compose -f docker/docker-compose.yml logs -f vizion     # watch it
+#   sudo reboot                                                    # cold-boot test: see docker/README.md
+#
+# Secrets are not in this file: create docker/.env (git-ignored) with
+#   VIZION_MQTT_PASSWORD=...        (the password made by mqtt/setup_broker.sh)
+services:
+  vizion:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: vizion:latest
+    restart: unless-stopped
+    ports:
+      - "8765:8765"
+    devices:
+      - /dev/video0:/dev/video0          # the USB webcam
+      - /dev/gpiochip0:/dev/gpiochip0    # Pi 5 header GPIO (older kernels: /dev/gpiochip4)
+    group_add:
+      - "video"
+      - "993"                            # gpio group id on Raspberry Pi OS: check with `getent group gpio`
+    environment:
+      - VIZION_MQTT_HOST=mosquitto
+      - VIZION_MQTT_PORT=8883
+      - VIZION_MQTT_USER=vizion
+      - VIZION_MQTT_PASSWORD=${VIZION_MQTT_PASSWORD:-}
+      - VIZION_MQTT_CAFILE=/certs/ca.crt
+    volumes:
+      - ../mqtt/certs/ca.crt:/certs/ca.crt:ro
+      - vizion-logs:/app/logs            # latency.csv and station.csv survive restarts
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    depends_on:
+      - mosquitto
+
+  mosquitto:
+    image: eclipse-mosquitto:2.0.20
+    restart: unless-stopped
+    ports:
+      - "8883:8883"                      # TLS only; there is no plain 1883 listener
+    volumes:
+      - ../mqtt/mosquitto.docker.conf:/mosquitto/config/mosquitto.conf:ro
+      - ../mqtt/passwd:/mosquitto/config/passwd:ro
+      - ../mqtt/acl:/mosquitto/config/acl:ro
+      - ../mqtt/certs:/mosquitto/certs:ro
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  vizion-logs:
